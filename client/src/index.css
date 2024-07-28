@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: 'Roboto', 'Noto Sans', Arial, Helvetica, sans-serif;
+}
+
+.t_head {
+  @apply bg-slate-700 px-8 py-4 text-start font-medium text-sm text-white;
+}
+
+.t_column {
+  @apply max-w-20 overflow-hidden text-ellipsis whitespace-nowrap px-4 py-5 text-xs font-normal;
+}
+
+.report_t_head {
+  @apply bg-slate-700 px-8 py-4 text-center font-normal text-white;
+}
+
+.report_t_column {
+  @apply max-w-20 overflow-hidden text-ellipsis whitespace-nowrap p-2 text-center text-xs font-normal;
+}
+
+.form_field {
+  @apply flex flex-col gap-1 text-sm text-slate-700;
+}
+
+.form_input {
+  @apply w-[15rem] rounded-md border border-slate-300 p-2 text-xs focus:outline-none xs:w-[22rem];
+}
+
+.filter_dropdown {
+  @apply cursor-pointer px-4 py-2 text-xs text-slate-800 hover:bg-slate-100;
+}
+
+.btn_success {
+  @apply z-0 rounded-md bg-green-600 py-2 font-medium text-white;
+}
+
+.btn_pending {
+  @apply z-0 rounded-md bg-orange-600 py-2 font-medium text-white;
+}
+
+.btn_failed {
+  @apply z-0 rounded-md bg-red-600 py-2 font-medium text-white;
+}
