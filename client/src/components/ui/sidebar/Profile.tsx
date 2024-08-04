@@ -3,14 +3,29 @@ import { IoPersonCircle } from 'react-icons/io5';
 import { MdOutlineKeyboardArrowDown, MdLogout } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import { cn } from './../../../utils/cn.tsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks.ts';
+import { logout } from '../../../redux/slices/userSlice.ts';
 
 const Profile = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const handleLogout = () => {
+    dispatch(logout());
+
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+
+    navigate('/');
+  };
+
+  const { email, name } = useAppSelector((state) => state.user.user);
 
   return (
     <div className='relative w-full'>
@@ -22,12 +37,12 @@ const Profile = () => {
               My Profile
             </p>
           </Link>
-          <Link to='/'>
+          <div onClick={handleLogout}>
             <p className='flex items-center gap-1 px-4 py-4 text-xs text-gray-800 hover:bg-gray-100'>
               <MdLogout className='text-lg' />
               Logout
             </p>
-          </Link>
+          </div>
         </div>
       )}
       <div
@@ -36,9 +51,13 @@ const Profile = () => {
       >
         <IoPersonCircle className='mr-1 text-5xl text-[#1c3153]' />
         <div className='flex w-full items-center justify-between pr-2'>
-          <div className='text-xs'>
-            <p className='font-semibold text-slate-800'>Allen Buenaventura</p>
-            <p className='text-xs font-light text-slate-700'>@allenbnvtra</p>
+          <div className='text-xs flex-1 overflow-hidden'>
+            <p className='font-semibold w-[7rem] text-slate-800 overflow-hidden whitespace-nowrap text-ellipsis'>
+              {name}
+            </p>
+            <p className='text-xs w-[7rem] font-light text-slate-700 overflow-hidden whitespace-nowrap text-ellipsis'>
+              @{email}
+            </p>
           </div>
           <div className='rounded-full bg-indigo-200 p-1'>
             <MdOutlineKeyboardArrowDown

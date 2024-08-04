@@ -10,8 +10,14 @@ interface GraphData {
 }
 
 const fetchDataGraph = async (): Promise<GraphData> => {
+  const token = localStorage.getItem('token');
   const { data } = await axios.get<{ result: GraphData }>(
-    `${import.meta.env.VITE_API_URL}/adminWidgets/getMonthlyBill`
+    `${import.meta.env.VITE_API_URL}/adminWidgets/getMonthlyBill`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add authorization header
+      },
+    }
   );
   return data.result;
 };

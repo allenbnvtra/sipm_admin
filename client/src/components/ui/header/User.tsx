@@ -1,15 +1,30 @@
 import { useState } from 'react';
 import { CgProfile } from 'react-icons/cg';
-
 import { IoPersonCircleSharp } from 'react-icons/io5';
 import { MdLogout, MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { logout } from '../../../redux/slices/userSlice';
 
 const User = () => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { email } = useAppSelector((state) => state.user.user);
+
   const toggleUserDropdown = () => {
     setIsUserDropdownOpen(!isUserDropdownOpen);
   };
+
+  const handleLogout = () => {
+    dispatch(logout());
+
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+
+    navigate('/');
+  };
+
   return (
     <div
       className='relative flex cursor-pointer items-center gap-5 rounded-full bg-[#244371a3] p-1 transition-all shadow-2xl hover:bg-[#375480a3]'
@@ -17,7 +32,9 @@ const User = () => {
     >
       <div className='flex items-center gap-1'>
         <IoPersonCircleSharp className='text-2xl' />
-        <p className='text-xs'>allenbnvtra</p>
+        <p className='text-xs w-[3.7rem] overflow-hidden whitespace-nowrap text-ellipsis'>
+          {email}
+        </p>
       </div>
       <MdOutlineKeyboardArrowDown />
       {isUserDropdownOpen && (
@@ -28,12 +45,13 @@ const User = () => {
               My Profile
             </p>
           </Link>
-          <Link to='/'>
-            <p className='flex items-center gap-1 px-4 py-3 text-xs text-gray-800 hover:rounded-b-md hover:bg-gray-100'>
-              <MdLogout className='text-lg' />
-              Logout
-            </p>
-          </Link>
+          <p
+            className='flex items-center gap-1 px-4 py-3 text-xs text-gray-800 hover:rounded-b-md hover:bg-gray-100 cursor-pointer'
+            onClick={handleLogout} // Add onClick handler to logout
+          >
+            <MdLogout className='text-lg' />
+            Logout
+          </p>
         </div>
       )}
     </div>

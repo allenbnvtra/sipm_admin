@@ -13,8 +13,14 @@ interface SummaryResult {
 }
 
 const fetchSummary = async (): Promise<SummaryResult> => {
+  const token = localStorage.getItem('token');
   const { data } = await axios.get<{ result: SummaryResult }>(
-    `${import.meta.env.VITE_API_URL}/adminWidgets/getWidgetData`
+    `${import.meta.env.VITE_API_URL}/adminWidgets/getWidgetData`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add authorization header
+      },
+    }
   );
   return data.result;
 };

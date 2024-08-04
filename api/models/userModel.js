@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-const userModel = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -29,7 +29,7 @@ const userModel = new mongoose.Schema(
       select: false,
     },
     passwordChangedAt: Date,
-    passwordResetToken: Date,
+    passwordResetToken: String, // Change to String if you are using tokens
     passwordResetExpires: Date,
     active: {
       type: Boolean,
@@ -43,38 +43,35 @@ const userModel = new mongoose.Schema(
   }
 );
 
-userModel.pre('save', async function (next) {
+// Hash password before saving
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
-  this.passwordChangedAt = Date.now() * 1000;
-  next();
-});
-
-userModel.pre('save', async function (next) {
   try {
-    // Only run this function if password is modified..
-    if (!this.isModified('password')) return next();
-
-    // Hash the password with coast of 12
-    let salt = await bcrypt.genSalt(12);
+    // Hash the password with a cost of 12
+    const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
+    // Set passwordChangedAt to current date
+    this.passwordChangedAt = Date.now();
   } catch (error) {
-    throw error;
+    return next(error);
   }
 });
 
-userModel.pre(/^find/, function (next) {
+// Filter out inactive users
+userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
   next();
 });
 
-userModel.methods.correctPassword = async function (
+// Compare passwords
+userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-const User = mongoose.models.User || mongoose.model('User', userModel);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export default User;

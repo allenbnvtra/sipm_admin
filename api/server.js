@@ -1,4 +1,5 @@
-import { server, app } from './socket/index.js';
+import app from './index.js';
+import server from './socket/index.js';
 import connectDB from './config/database.js';
 import morgan from 'morgan';
 
@@ -16,14 +17,15 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-connectDB();
-
+// SERVER
 const PORT = process.env.PORT || 51004;
 
 server.listen(PORT, () => {
+  connectDB();
   console.log(`Server running at: http://localhost:${PORT}`);
 });
 
+// Error server rejection
 process.on('unhandledRejection', (err) => {
   console.log(err.name, ' : ', err.message);
   console.log('Shutting down the server because of Unhandled Rejection');

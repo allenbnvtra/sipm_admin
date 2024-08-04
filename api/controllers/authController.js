@@ -4,6 +4,7 @@ import User from '../models/userModel.js';
 const MAX_ATTEMPTS = 5;
 const LOCK_TIME = 15 * 60 * 1000;
 
+// Function to handle failed login attempts
 const handleFailedLogin = async (user) => {
   user.loginAttempts += 1;
   if (user.loginAttempts >= MAX_ATTEMPTS) {
@@ -12,10 +13,12 @@ const handleFailedLogin = async (user) => {
   await user.save();
 };
 
+// Function to generate a JWT token
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: '30m' });
 };
 
+// Login handler
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -28,9 +31,12 @@ export const login = async (req, res) => {
     }
 
     // Find the user
-    const user = await User.findOne({ email }).select(
-      '+password +loginAttemps +lockUntil +role'
-    );
+    const user = await User.findOne({
+      email,
+      active: true,
+      role: 'admin',
+    }).select('+password +loginAttempts +lockUntil +role');
+
     if (!user) {
       return res.status(401).json({
         status: 'fail',
@@ -51,7 +57,7 @@ export const login = async (req, res) => {
       password,
       user.password
     );
-    if (!isPasswordCorrect || user.role !== 'admin' || !user.active) {
+    if (!isPasswordCorrect) {
       await handleFailedLogin(user);
       return res.status(401).json({
         status: 'fail',
@@ -70,14 +76,14 @@ export const login = async (req, res) => {
     return res
       .status(200)
       .cookie('token', token, {
-        maxAge: 30 * 60 * 1000,
+        maxAge: 30 * 60 * 1000, // 30 minutes
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
       })
       .json({
-        token,
         status: 'success',
+        token,
         result: {
           _id: user._id,
           email: user.email,
@@ -94,6 +100,7 @@ export const login = async (req, res) => {
   }
 };
 
+// Logout handler
 export const logout = async (req, res) => {
   try {
     return res.status(200).cookie('token', '', { maxAge: 0 }).json({
@@ -101,6 +108,7 @@ export const logout = async (req, res) => {
       message: 'Logged out successfully',
     });
   } catch (error) {
+    console.error('Error during logout:', error);
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error',

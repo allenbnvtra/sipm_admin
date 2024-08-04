@@ -5,7 +5,6 @@ export const isAuthenticated = async (req, res, next) => {
   try {
     let token;
 
-    // Extract token from Authorization header or cookies
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')

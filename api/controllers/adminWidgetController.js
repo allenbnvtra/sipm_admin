@@ -152,12 +152,12 @@ export const getRecentTransactions = async (req, res) => {
         path: 'user',
         select: 'email',
       })
-      .select('receiptNo paymentAmount user');
+      .select('receiptNo paymentDate user');
 
     const formattedTransactions = transactions.map((transaction) => ({
       username: transaction.user.email,
       receiptNo: transaction.receiptNo,
-      paymentAmount: transaction.paymentAmount,
+      paymentDate: transaction.paymentDate,
     }));
 
     return res.status(200).json({

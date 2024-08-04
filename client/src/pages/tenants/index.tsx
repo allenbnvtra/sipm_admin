@@ -38,9 +38,13 @@ const fetchTenants = async (
   page: number,
   searchTenant: string
 ): Promise<TenantsResponse> => {
+  const token = localStorage.getItem('token');
   const { data } = await axios.get<TenantsResponse>(
     `${import.meta.env.VITE_API_URL}/tenants`,
     {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include authorization header
+      },
       params: {
         search: searchTenant,
         page,

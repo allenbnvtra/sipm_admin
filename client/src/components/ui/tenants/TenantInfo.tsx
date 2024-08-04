@@ -1,13 +1,19 @@
 import { AiOutlineMessage } from 'react-icons/ai';
 import { FaArchive, FaEdit } from 'react-icons/fa';
 import { MdAlternateEmail, MdOutlinePlace } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 const TenantInfo = () => {
   return (
     <div className='md:w-[30%] rounded-md border border-slate-200 bg-white h-full shadow-md mb-3'>
       <div className='flex justify-between rounded-t-md items-center py-3 px-5 border-b border-b-slate-200 shadow-md bg-slate-800 text-white'>
         <p className='text-md font-semibold'>Tenant Info</p>
-        <AiOutlineMessage className='text-lg cursor-pointer' title='Message' />
+        <Link to='/inbox'>
+          <AiOutlineMessage
+            className='text-lg cursor-pointer'
+            title='Message'
+          />
+        </Link>
       </div>
 
       <div className='flex-col flex justify-between items-center  text-slate-800 py-5 px-5'>

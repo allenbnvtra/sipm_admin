@@ -4,14 +4,23 @@ import axios from 'axios';
 interface Transaction {
   username: string;
   receiptNo: string;
-  paymentAmount: number;
+  paymentDate: Date;
 }
 
 const fetchTransactions = async (): Promise<Transaction[]> => {
+  const token = localStorage.getItem('token');
   const { data } = await axios.get<{ result: Transaction[] }>(
-    `${import.meta.env.VITE_API_URL}/adminWidgets/getRecentTransaction`
+    `${import.meta.env.VITE_API_URL}/adminWidgets/getRecentTransaction`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add authorization header
+      },
+    }
   );
-  return data.result;
+  return data.result.map((transaction) => ({
+    ...transaction,
+    paymentDate: new Date(transaction.paymentDate), // Convert to Date object
+  }));
 };
 
 const DashboardTransactions = () => {
@@ -107,7 +116,7 @@ const DashboardTransactions = () => {
                 Receipt No.
               </th>
               <th className='px-2 py-4 text-center font-normal w-[33%] whitespace-nowrap'>
-                Payment Amount
+                Payment Date
               </th>
             </tr>
           </thead>
@@ -131,7 +140,11 @@ const DashboardTransactions = () => {
                     {transaction.receiptNo}
                   </td>
                   <td className='p-2 text-center font-normal text-ellipsis max-w-20 overflow-hidden whitespace-nowrap'>
-                    &#8369; {transaction.paymentAmount.toLocaleString()}
+                    {transaction.paymentDate.toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: '2-digit',
+                    })}
                   </td>
                 </tr>
               ))
