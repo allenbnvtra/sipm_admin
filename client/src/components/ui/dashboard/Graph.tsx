@@ -11,6 +11,10 @@ interface GraphData {
 
 const fetchDataGraph = async (): Promise<GraphData> => {
   const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No token found');
+  }
+
   const { data } = await axios.get<{ result: GraphData }>(
     `${import.meta.env.VITE_API_URL}/adminWidgets/getMonthlyBill`,
     {

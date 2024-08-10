@@ -70,6 +70,15 @@ const LoginPage = () => {
 
   return (
     <div className='flex h-screen'>
+      <div className='md:w-[65%] hidden md:block'>
+        <div className='h-full w-full overflow-hidden'>
+          <img
+            className='h-full w-full object-cover blur-[0.5px]'
+            src='/new-municipal.jpg'
+            alt='SI Municipal'
+          />
+        </div>
+      </div>
       <div className='flex w-full px-3 md:w-[35%] justify-center items-center'>
         <div className='md:w-[75%]'>
           <div className='flex gap-1 flex-col items-center justify-center'>
@@ -146,15 +155,6 @@ const LoginPage = () => {
               {loading ? 'Loading...' : 'Login'}
             </button>
           </form>
-        </div>
-      </div>
-      <div className='md:w-[65%] hidden md:block'>
-        <div className='h-full w-full overflow-hidden'>
-          <img
-            className='h-full w-full object-cover'
-            src='/si-municipal.jpg'
-            alt='SI Municipal'
-          />
         </div>
       </div>
     </div>

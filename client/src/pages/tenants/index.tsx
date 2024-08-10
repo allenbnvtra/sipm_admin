@@ -24,7 +24,7 @@ interface TenantsData {
   name: string;
   stallNumber: string;
   username: string;
-  balance: number;
+  remainingBalance: number;
 }
 
 interface TenantsResponse {
@@ -36,18 +36,20 @@ interface TenantsResponse {
 
 const fetchTenants = async (
   page: number,
-  searchTenant: string
+  searchTenant: string,
+  query: string
 ): Promise<TenantsResponse> => {
   const token = localStorage.getItem('token');
   const { data } = await axios.get<TenantsResponse>(
     `${import.meta.env.VITE_API_URL}/tenants`,
     {
       headers: {
-        Authorization: `Bearer ${token}`, // Include authorization header
+        Authorization: `Bearer ${token}`,
       },
       params: {
         search: searchTenant,
         page,
+        sort: query,
       },
     }
   );
@@ -58,11 +60,20 @@ const TenantsPage = () => {
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(1);
 
-  const [isEditTenantModalOpen, setIsEditTenantModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditTenantModalOpen, setIsEditTenantModalOpen] =
+    useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isAddTenantModalOpen, setIsAddTenantModalOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [isAddTenantModalOpen, setIsAddTenantModalOpen] =
+    useState<boolean>(false);
+
+  const [query, setQuery] = useState<string>('');
+
+  const handleFilterChange = (filter: string) => {
+    setQuery(filter);
+    console.log(`Filter selected: ${filter}`);
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -70,8 +81,8 @@ const TenantsPage = () => {
   };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['tenants', page, search],
-    queryFn: () => fetchTenants(page, search),
+    queryKey: ['tenants', page, search, query],
+    queryFn: () => fetchTenants(page, search, query),
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
@@ -121,7 +132,7 @@ const TenantsPage = () => {
                 className='cursor-pointer text-2xl text-slate-700'
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
               />
-              {isFilterOpen && <Filter />}
+              {isFilterOpen && <Filter onFilterChange={handleFilterChange} />}
             </div>
           </div>
         </div>
@@ -135,11 +146,13 @@ const TenantsPage = () => {
       <div className='relative z-0 mt-4 h-[44rem] overflow-x-auto rounded-md border border-slate-300 bg-white shadow-md md:h-[80vh]'>
         <div className='h-[calc(100%-3rem)] overflow-y-auto scrollbar-hide rounded-t-md'>
           {isLoading ? (
-            <div className='flex justify-center items-center h-full'>
-              <p>Loading...</p>
+            <div className='flex w-full justify-center items-center h-full'>
+              <p className='flex justify-center absolute top-[250px] left-[500px] text-slate-800 text-xs'>
+                Loading...
+              </p>
             </div>
           ) : isError ? (
-            <div className='flex justify-center items-center h-full'>
+            <div className='flex justify-center items-center h-full text-slate-800 text-xs'>
               <p>Error loading data: {error.message}</p>
             </div>
           ) : (
@@ -169,10 +182,10 @@ const TenantsPage = () => {
                       <td className='t_column'>{tenant.stallNumber}</td>
                       <td className='t_column'>{tenant.username}</td>
                       <td className='t_column'>
-                        &#8369; {tenant.balance.toLocaleString()}
+                        &#8369; {tenant.remainingBalance.toLocaleString()}
                       </td>
                       <td className='flex items-center justify-center gap-2 py-3 text-lg md:text-[16px]'>
-                        <Link to={`/tenants/${tenant.id}/bill`}>
+                        <Link to={`/tenants/${tenant.id}`}>
                           <FaRegListAlt
                             title='View Bills'
                             className='cursor-pointer text-blue-700'

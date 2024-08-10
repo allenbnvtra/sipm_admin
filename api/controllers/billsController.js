@@ -9,7 +9,6 @@ export const getAllBill = async (req, res) => {
       result: bill,
     });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error',

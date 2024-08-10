@@ -238,7 +238,7 @@ const DashboardTable = () => {
                         &#8369; {tenant.balance.toLocaleString()}
                       </td>
                       <td className='flex items-center justify-center gap-2 py-3 text-lg md:text-[16px]'>
-                        <Link to={`/tenants/${tenant.id}/bill`}>
+                        <Link to={`/tenants/${tenant.id}`}>
                           <FaRegListAlt
                             onClick={() => setIsModalOpen(true)}
                             title='View Bills'

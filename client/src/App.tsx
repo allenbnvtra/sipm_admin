@@ -28,7 +28,7 @@ function App() {
               <Route path='/tenants' element={<TenantsPage />} />
               <Route path='/inbox' element={<InboxPage />} />
               <Route
-                path='/tenants/:tenantId/bill'
+                path='/tenants/:tenantId'
                 element={<BillPerTenantsPage />}
               />
               <Route path='*' element={<Navigate to='/not-found' />} />

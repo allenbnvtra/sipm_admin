@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { IoClose } from 'react-icons/io5';
+import { useEffect, useState } from 'react';
+import { IoClose, IoPersonCircleSharp } from 'react-icons/io5';
 
 interface AddTenantProps {
   isAddTenantModalOpen: boolean;
@@ -10,6 +10,31 @@ const AddTenantModal = ({
   isAddTenantModalOpen,
   closeAddTenantModal,
 }: AddTenantProps) => {
+  const [selectedProfileImage, setSelectedProfileImage] = useState<
+    string | null
+  >(null);
+
+  const handleProfileImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedProfileImage(imageUrl);
+    }
+  };
+
+  const renderProfileIcon = () => {
+    if (selectedProfileImage) {
+      return (
+        <img
+          src={selectedProfileImage}
+          alt='Profile'
+          className='rounded-full w-28 h-28 object-cover'
+        />
+      );
+    }
+    return <IoPersonCircleSharp size={110} />;
+  };
+
   useEffect(() => {
     if (isAddTenantModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -49,8 +74,28 @@ const AddTenantModal = ({
           <p className='text-xl font-semibold text-slate-700'>Add New Tenant</p>
         </div>
 
-        <div className='flex h-full flex-col justify-between'>
-          <div className='mt-7 flex flex-col gap-2'>
+        <div className='flex flex-col justify-between'>
+          <div className='mt-3 flex flex-col gap-2'>
+            <div className='flex justify-center cursor-pointer'>
+              <div className='text-center flex flex-col items-center'>
+                {renderProfileIcon()}
+                <div className='flex justify-center mt-2'>
+                  <input
+                    type='file'
+                    accept='image/*'
+                    onChange={handleProfileImageChange}
+                    className='hidden'
+                    id='profileImageInput'
+                  />
+                  <label
+                    htmlFor='profileImageInput'
+                    className='cursor-pointer px-4 py-2 border rounded text-xs text-indigo-600 border-indigo-600 hover:bg-indigo-600 hover:text-white transition'
+                  >
+                    Upload Profile Image
+                  </label>
+                </div>
+              </div>
+            </div>
             <div className='form_field'>
               <label htmlFor='name'>Name</label>
               <input
@@ -107,7 +152,7 @@ const AddTenantModal = ({
             </div>
           </div>
 
-          <div className='mb-14'>
+          <div className='mt-7'>
             <button className='w-full rounded-md bg-indigo-600 py-2 font-semibold text-white hover:bg-indigo-700'>
               Submit
             </button>

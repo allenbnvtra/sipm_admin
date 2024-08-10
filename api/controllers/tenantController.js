@@ -8,6 +8,7 @@ export const getAllTenants = async (req, res) => {
     const limit = 10;
     const skip = (page - 1) * limit;
     const search = req.query.search || '';
+    const sort = req.query.sort || ''; // Get the sort parameter
     const searchTerms = search.split(',').map((term) => term.trim());
 
     const searchQuery = {
@@ -22,8 +23,22 @@ export const getAllTenants = async (req, res) => {
       })),
     };
 
+    // Construct the sort object
+    let sortObject = {};
+    if (sort) {
+      const sortFields = sort.split(',').map((field) => field.trim());
+      sortFields.forEach((field) => {
+        const order = field.startsWith('-') ? -1 : 1;
+        const fieldName = field.startsWith('-') ? field.substring(1) : field;
+        sortObject[fieldName] = order;
+      });
+    }
+
     const totalUsersCount = await User.countDocuments(searchQuery);
-    const users = await User.find(searchQuery).skip(skip).limit(limit);
+    const users = await User.find(searchQuery)
+      .skip(skip)
+      .limit(limit)
+      .sort(sortObject);
 
     const userDataPromises = users.map(async (user) => {
       const remainingBalance = await Month.aggregate([
@@ -41,13 +56,22 @@ export const getAllTenants = async (req, res) => {
         name: user.name,
         stallNumber: user.stallNumber,
         username: user.email,
-        balance: remainingBalance.length
+        remainingBalance: remainingBalance.length
           ? parseFloat(remainingBalance[0].totalRemainingBalance.toFixed(2))
           : 0,
       };
     });
 
-    const userData = await Promise.all(userDataPromises);
+    let userData = await Promise.all(userDataPromises);
+
+    // Sort userData based on remainingBalance if the sort field is remainingBalance
+    if (sortObject.remainingBalance) {
+      userData.sort(
+        (a, b) =>
+          sortObject.remainingBalance *
+          (b.remainingBalance - a.remainingBalance)
+      );
+    }
 
     return res.status(200).json({
       status: 'success',
@@ -104,7 +128,7 @@ export const getTenant = async (req, res) => {
 export const getTenantBill = async (req, res) => {
   try {
     const { tenantId } = req.params;
-    const { page = 1, limit = 10 } = req.query;
+    const { year } = req.query;
 
     if (!mongoose.Types.ObjectId.isValid(tenantId)) {
       return res.status(400).json({
@@ -113,20 +137,30 @@ export const getTenantBill = async (req, res) => {
       });
     }
 
-    const skip = (page - 1) * limit;
-
     const bills = await Month.find({ user: tenantId })
-      .skip(skip)
-      .limit(Number(limit));
+      .select('billingPeriod status meterNumber totalPaid remainingBalance')
+      .lean();
 
-    const totalBills = await Month.countDocuments({ user: tenantId });
-    const totalPages = Math.ceil(totalBills / limit);
+    const filteredBills = bills.filter((bill) => {
+      const billingYear = new Date(bill.billingPeriod).getFullYear();
+      return billingYear.toString() === year;
+    });
+
+    const result = filteredBills.map((bill) => ({
+      id: bill._id,
+      billingPeriod: bill.billingPeriod,
+      status: bill.status,
+      meterNumber: bill.meterNumber,
+      amountPaid: bill.totalPaid,
+      remainingBalance: bill.remainingBalance,
+    }));
+
+    const totalBills = filteredBills.length;
 
     return res.status(200).json({
       status: 'success',
-      totalPages,
-      currentPage: Number(page),
-      result: bills,
+      result,
+      totalBills,
     });
   } catch (error) {
     return res.status(500).json({
