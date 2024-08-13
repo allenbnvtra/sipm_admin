@@ -50,7 +50,7 @@ const InboxPage = () => {
             </div>
           </div>
 
-          {/* MESSAGE */}
+          {/* INBOX */}
           <div className='hover:bg-indigo-45 mb-1 flex h-[3.3rem] cursor-pointer items-center justify-between rounded-md p-2 hover:bg-indigo-50'>
             <div className='flex items-center'>
               <div className='h-10 w-10 overflow-hidden rounded-full'>

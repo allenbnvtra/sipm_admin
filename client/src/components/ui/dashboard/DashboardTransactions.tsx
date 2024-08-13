@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import axiosInstance from '../../../utils/axiosInstance';
 
 interface Transaction {
   username: string;
@@ -8,14 +8,8 @@ interface Transaction {
 }
 
 const fetchTransactions = async (): Promise<Transaction[]> => {
-  const token = localStorage.getItem('token');
-  const { data } = await axios.get<{ result: Transaction[] }>(
-    `${import.meta.env.VITE_API_URL}/adminWidgets/getRecentTransaction`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`, // Add authorization header
-      },
-    }
+  const { data } = await axiosInstance.get<{ result: Transaction[] }>(
+    `${import.meta.env.VITE_API_URL}/adminWidgets/getRecentTransaction`
   );
   return data.result.map((transaction) => ({
     ...transaction,

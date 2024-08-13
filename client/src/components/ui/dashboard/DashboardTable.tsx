@@ -2,9 +2,9 @@ import { IoSearchSharp } from 'react-icons/io5';
 import { FaAngleLeft, FaAngleRight, FaRegListAlt } from 'react-icons/fa';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import ViewBillsModal from '../modal/ViewBillsModal';
 import { Link } from 'react-router-dom';
+import axiosInstance from '../../../utils/axiosInstance';
 
 interface TenantsData {
   id: string;
@@ -25,13 +25,9 @@ const fetchTenants = async (
   page: number,
   searchTenant: string
 ): Promise<TenantsResponse> => {
-  const token = localStorage.getItem('token');
-  const { data } = await axios.get<TenantsResponse>(
+  const { data } = await axiosInstance.get<TenantsResponse>(
     `${import.meta.env.VITE_API_URL}/adminWidgets/getTenantData`,
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         search: searchTenant,
         page,

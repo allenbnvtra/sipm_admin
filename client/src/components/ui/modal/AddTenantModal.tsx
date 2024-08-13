@@ -14,9 +14,12 @@ const AddTenantModal = ({
     string | null
   >(null);
 
-  const handleProfileImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
+  const handleProfileImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (files && files[0]) {
+      const file = files[0];
       const imageUrl = URL.createObjectURL(file);
       setSelectedProfileImage(imageUrl);
     }

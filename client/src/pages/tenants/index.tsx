@@ -11,13 +11,13 @@ import { IoMdPersonAdd } from 'react-icons/io';
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import DeleteModal from '../../components/ui/modal/DeleteModal';
 import EditModal from '../../components/ui/modal/EditModal';
 import AddTenantModal from '../../components/ui/modal/AddTenantModal';
 import Filter from '../../components/ui/tenants/Filter';
+import axiosInstance from '../../utils/axiosInstance';
 
 interface TenantsData {
   id: string;
@@ -39,13 +39,9 @@ const fetchTenants = async (
   searchTenant: string,
   query: string
 ): Promise<TenantsResponse> => {
-  const token = localStorage.getItem('token');
-  const { data } = await axios.get<TenantsResponse>(
+  const { data } = await axiosInstance.get<TenantsResponse>(
     `${import.meta.env.VITE_API_URL}/tenants`,
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         search: searchTenant,
         page,

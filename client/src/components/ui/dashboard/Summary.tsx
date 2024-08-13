@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { GoPeople } from 'react-icons/go';
 import { MdMoneyOff, MdOutlineReportOff } from 'react-icons/md';
 import SummaryBoxUI from './SummaryBox';
 import { IconType } from 'react-icons';
+import axiosInstance from '../../../utils/axiosInstance';
 
 interface SummaryResult {
   userCount: number;
@@ -13,14 +13,8 @@ interface SummaryResult {
 }
 
 const fetchSummary = async (): Promise<SummaryResult> => {
-  const token = localStorage.getItem('token');
-  const { data } = await axios.get<{ result: SummaryResult }>(
-    `${import.meta.env.VITE_API_URL}/adminWidgets/getWidgetData`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`, // Add authorization header
-      },
-    }
+  const { data } = await axiosInstance.get<{ result: SummaryResult }>(
+    `${import.meta.env.VITE_API_URL}/adminWidgets/getWidgetData`
   );
   return data.result;
 };

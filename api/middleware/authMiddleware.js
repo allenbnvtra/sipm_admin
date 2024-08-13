@@ -10,8 +10,8 @@ export const isAuthenticated = async (req, res, next) => {
       req.headers.authorization.startsWith('Bearer')
     ) {
       token = req.headers.authorization.split(' ')[1];
-    } else if (req.cookies.token) {
-      token = req.cookies.token;
+    } else if (req.cookies.accessToken) {
+      token = req.cookies.accessToken;
     }
 
     if (!token) {
@@ -21,7 +21,7 @@ export const isAuthenticated = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
     const currentUser = await User.findById(decoded.userId).select('+role');
 
@@ -42,7 +42,7 @@ export const isAuthenticated = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       status: 'fail',
-      message: 'Invalid token. Please log in again!',
+      message: 'AUTH: Invalid token. Please log in again!',
     });
   }
 };

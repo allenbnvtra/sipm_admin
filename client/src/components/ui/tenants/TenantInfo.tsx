@@ -1,4 +1,3 @@
-import axios from 'axios';
 import DeleteModal from '../modal/DeleteModal';
 
 import { useQuery } from '@tanstack/react-query';
@@ -10,6 +9,7 @@ import { FaArchive, FaEdit } from 'react-icons/fa';
 import { IoPersonCircle } from 'react-icons/io5';
 import { CiEdit } from 'react-icons/ci';
 import { MdAlternateEmail, MdOutlinePlace } from 'react-icons/md';
+import axiosInstance from '../../../utils/axiosInstance';
 
 interface TenantInfo {
   id: string;
@@ -19,18 +19,8 @@ interface TenantInfo {
 }
 
 const fetchTenantInfo = async (tenantId: string): Promise<TenantInfo> => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    throw new Error('No token found');
-  }
-
-  const { data } = await axios.get<{ result: TenantInfo }>(
-    `${import.meta.env.VITE_API_URL}/tenants/${tenantId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`, // Add authorization header
-      },
-    }
+  const { data } = await axiosInstance.get<{ result: TenantInfo }>(
+    `${import.meta.env.VITE_API_URL}/tenants/${tenantId}`
   );
 
   return data.result;
@@ -53,7 +43,7 @@ const TenantInfo = () => {
       <div className='md:w-[30%] rounded-md border border-slate-200 bg-white h-full shadow-md mb-3'>
         <div className='flex justify-between rounded-t-md items-center py-3 px-5 border-b border-b-slate-200 shadow-md bg-slate-800 text-white'>
           <p className='text-md font-semibold'>Tenant Info</p>
-          <Link to='/inbox'>
+          <Link to={`/inbox/m/${data?.id}`}>
             <AiOutlineMessage
               className='text-lg cursor-pointer'
               title='Message'

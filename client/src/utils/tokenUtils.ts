@@ -7,7 +7,6 @@ export const isTokenExpired = (token: string): boolean => {
       return true;
     }
     const now = Date.now().valueOf() / 1000;
-    // console.log(decoded.exp < now);
     return decoded.exp < now;
   } catch (e) {
     return true;

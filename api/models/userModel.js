@@ -58,11 +58,11 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-// Filter out inactive users
-userSchema.pre(/^find/, function (next) {
-  this.find({ active: { $ne: false } });
-  next();
-});
+// // Filter out inactive users
+// userSchema.pre(/^find/, function (next) {
+//   this.find({ active: { $ne: false } });
+//   next();
+// });
 
 // Compare passwords
 userSchema.methods.correctPassword = async function (

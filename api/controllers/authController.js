@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import { generateAccessToken, generateRefreshToken } from '../helpers/token.js';
 import User from '../models/userModel.js';
 
 const MAX_ATTEMPTS = 5;
@@ -11,11 +11,6 @@ const handleFailedLogin = async (user) => {
     user.lockUntil = Date.now() + LOCK_TIME;
   }
   await user.save();
-};
-
-// Function to generate a JWT token
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET_KEY, { expiresIn: '30m' });
 };
 
 // Login handler
@@ -71,26 +66,33 @@ export const login = async (req, res) => {
     await user.save();
 
     // Generate JWT token
-    const token = generateToken(user._id);
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
 
-    return res
-      .status(200)
-      .cookie('token', token, {
-        maxAge: 30 * 60 * 1000, // 30 minutes
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-      })
-      .json({
-        status: 'success',
-        token,
-        result: {
-          _id: user._id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        },
-      });
+    res.cookie('token', refreshToken, {
+      maxAge: 30 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+
+    res.cookie('accessToken', accessToken, {
+      maxAge: 15 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+
+    return res.status(200).json({
+      status: 'success',
+      accessToken,
+      result: {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+    });
   } catch (error) {
     console.error('Error during login:', error);
     return res.status(500).json({

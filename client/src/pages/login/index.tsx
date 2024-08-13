@@ -5,7 +5,6 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setAuth } from '../../redux/slices/userSlice';
-import { isTokenExpired } from '../../utils/tokenUtils';
 
 interface IFormInput {
   email: string;
@@ -24,7 +23,6 @@ const LoginPage = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const toastId = toast.loading('Logging in...');
-
     setLoading(true);
 
     try {
@@ -35,13 +33,15 @@ const LoginPage = () => {
       );
 
       if (response.status === 200) {
-        const { token } = response.data;
+        const { accessToken } = response.data;
         const { _id, email, name } = response.data.result;
 
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', accessToken);
         localStorage.setItem('user', JSON.stringify({ id: _id, email, name }));
 
-        dispatch(setAuth({ token, user: { id: _id, email, name } }));
+        dispatch(
+          setAuth({ token: accessToken, user: { id: _id, email, name } })
+        );
         toast.success('Logged in successfully!', { id: toastId });
         navigate('/dashboard');
       }
@@ -60,8 +60,10 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
+
   const token = useAppSelector((state) => state.user.token);
-  const isAuthenticated = token && !isTokenExpired(token);
+  const isAuthenticated = token;
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard');
@@ -109,7 +111,7 @@ const LoginPage = () => {
               />
               {errors.email && (
                 <span className='text-red-500 text-xs'>
-                  {errors.email.message?.toString() ?? 'Error'}
+                  {errors.email.message ?? 'Error'}
                 </span>
               )}
             </div>
@@ -122,13 +124,11 @@ const LoginPage = () => {
                 className='border border-slate-300 rounded-md p-3 text-xs focus:outline-none'
                 type='password'
                 placeholder='Enter your password'
-                {...register('password', {
-                  required: 'Password is required',
-                })}
+                {...register('password', { required: 'Password is required' })}
               />
               {errors.password && (
                 <span className='text-red-500 text-xs'>
-                  {errors.password.message?.toString() ?? 'Error'}
+                  {errors.password.message ?? 'Error'}
                 </span>
               )}
             </div>

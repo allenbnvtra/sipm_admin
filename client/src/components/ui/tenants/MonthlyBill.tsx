@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { FaClock } from 'react-icons/fa';
 import { MdOutlineEventNote } from 'react-icons/md';
 import { Link, useParams } from 'react-router-dom';
+import axiosInstance from '../../../utils/axiosInstance';
 
 interface MonthlyBillPerTenant {
   id: string;
@@ -27,13 +27,9 @@ const fetchMonthlyBillPerTenant = async (
   year: string,
   tenantId: string
 ): Promise<MonthlyBillPerTenantResponse> => {
-  const token = localStorage.getItem('token');
-  const { data } = await axios.get<MonthlyBillPerTenantResponse>(
+  const { data } = await axiosInstance.get<MonthlyBillPerTenantResponse>(
     `${import.meta.env.VITE_API_URL}/tenants/${tenantId}/bill`,
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         year,
       },

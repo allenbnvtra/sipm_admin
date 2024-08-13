@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Socket } from 'socket.io-client';
 
 export interface UserState {
   token: string | null;
@@ -7,6 +8,7 @@ export interface UserState {
     name: string | null;
     email: string | null;
   };
+  socketConnection: Socket | null;
 }
 
 const initialState: UserState = {
@@ -16,6 +18,7 @@ const initialState: UserState = {
     name: null,
     email: null,
   },
+  socketConnection: null,
 };
 
 const userSlice = createSlice({
@@ -35,9 +38,16 @@ const userSlice = createSlice({
       localStorage.setItem('token', action.payload.token);
       localStorage.setItem('user', JSON.stringify(action.payload.user));
     },
+
+    setSocketConnection: (state, action: PayloadAction<Socket>) => {
+      state.socketConnection =
+        action.payload as unknown as typeof state.socketConnection;
+    },
+
     logout: (state) => {
       state.token = null;
       state.user = { id: null, name: null, email: null };
+      state.socketConnection = null;
 
       // Clear from localStorage
       localStorage.removeItem('token');
@@ -46,5 +56,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setAuth, logout } = userSlice.actions;
+export const { setAuth, setSocketConnection, logout } = userSlice.actions;
 export default userSlice.reducer;

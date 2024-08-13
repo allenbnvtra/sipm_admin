@@ -27,6 +27,7 @@ function App() {
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/tenants' element={<TenantsPage />} />
               <Route path='/inbox' element={<InboxPage />} />
+              <Route path='/inbox/m/:userId' element={<InboxPage />} />
               <Route
                 path='/tenants/:tenantId'
                 element={<BillPerTenantsPage />}

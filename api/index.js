@@ -10,6 +10,7 @@ import userRoute from './routes/userRoute.js';
 import adminWidgetsRoute from './routes/adminWidgetsRoute.js';
 import billsRoute from './routes/billsRoute.js';
 import tenantRoute from './routes/tenantRoute.js';
+import refreshTokenRoute from './routes/refreshTokenRoute.js';
 
 dotenv.config({});
 
@@ -32,6 +33,7 @@ app.use('/api/v1/user', userRoute);
 app.use('/api/v1/adminWidgets', adminWidgetsRoute);
 app.use('/api/v1/bills', billsRoute);
 app.use('/api/v1/tenants', tenantRoute);
+app.use('/api/v1/refresh', refreshTokenRoute);
 
 app.all('*', function (req, res) {
   return res.status(404).json({

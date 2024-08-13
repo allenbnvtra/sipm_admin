@@ -1,7 +1,7 @@
 import { Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '../../../utils/axiosInstance';
 
 interface GraphData {
   remainingBalance: number;
@@ -10,18 +10,8 @@ interface GraphData {
 }
 
 const fetchDataGraph = async (): Promise<GraphData> => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    throw new Error('No token found');
-  }
-
-  const { data } = await axios.get<{ result: GraphData }>(
-    `${import.meta.env.VITE_API_URL}/adminWidgets/getMonthlyBill`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`, // Add authorization header
-      },
-    }
+  const { data } = await axiosInstance.get<{ result: GraphData }>(
+    `${import.meta.env.VITE_API_URL}/adminWidgets/getMonthlyBill`
   );
   return data.result;
 };

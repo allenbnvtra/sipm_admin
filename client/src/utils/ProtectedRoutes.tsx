@@ -1,35 +1,53 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import Sidebar from '../components/ui/sidebar/Sidebar';
 import Header from '../components/ui/header/Header';
 import MobileNav from '../components/ui/mobileNav/MobileNav';
-import { SocketProvider } from '../socket/socketContext';
-import { useAppSelector } from '../redux/hooks';
-import { isTokenExpired } from './tokenUtils';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { io, Socket } from 'socket.io-client';
+import { setSocketConnection } from '../redux/slices/userSlice';
 
 const ProtectedRoutes: React.FC = () => {
   const token = useAppSelector((state) => state.user.token);
-  const isAuthenticated = token && !isTokenExpired(token);
+  const isAuthenticated = !!token;
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const socketConnection: Socket = io('http://localhost:51003/', {
+      auth: {
+        token: localStorage.getItem('token'),
+      },
+    });
+
+    socketConnection.on('onlineUser', (data) => {
+      console.log(data);
+    });
+
+    dispatch(setSocketConnection(socketConnection));
+
+    return () => {
+      socketConnection.disconnect();
+    };
+  }, [dispatch]);
 
   if (!isAuthenticated) {
     return <Navigate to='/' replace />;
   }
 
   return (
-    <SocketProvider>
-      <div className='flex bg-gray-100'>
-        <Sidebar />
-        <div className='w-full'>
-          <Header />
-          <div className='bg-gray-100 p-3 md:px-6'>
-            <Outlet />
-          </div>
-          <div className='sticky bottom-0'>
-            <MobileNav />
-          </div>
+    <div className='flex bg-gray-100'>
+      <Sidebar />
+      <div className='w-full'>
+        <Header />
+        <div className='bg-gray-100 p-3 md:px-6'>
+          <Outlet />
+        </div>
+        <div className='sticky bottom-0'>
+          <MobileNav />
         </div>
       </div>
-    </SocketProvider>
+    </div>
   );
 };
 
