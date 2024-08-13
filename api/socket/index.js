@@ -91,13 +91,39 @@ io.on('connection', async (socket) => {
         );
 
         // Send updated conversations
-        const conversationSender = await getConversation(data.sender);
-        const conversationReceiver = await getConversation(data.receiver);
+        const conversationSender = await getConversation(data?.sender);
+        const conversationReceiver = await getConversation(data?.receiver);
 
-        io.to(data.sender).emit('conversation', conversationSender);
-        io.to(data.receiver).emit('conversation', conversationReceiver);
+        io.to(data?.sender).emit('conversation', conversationSender);
+        io.to(data?.receiver).emit('conversation', conversationReceiver);
       } catch (error) {
         console.error('Error handling send message:', error);
+      }
+    });
+
+    // Add this block to handle fetching messages for a specific conversation
+    socket.on('get messages', async (data) => {
+      try {
+        const conversationId = await findOrCreateConversation(
+          data?.sender,
+          data?.receiver
+        );
+        const conversation = await Conversation.findById(conversationId)
+          .populate('messages')
+          .sort({ updatedAt: -1 });
+
+        socket.emit('show messages', conversation?.messages || []);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    });
+
+    socket.on('message sidebar', async (currentUserId) => {
+      try {
+        const conversation = await getConversation(currentUserId);
+        socket.emit('conversation', conversation);
+      } catch (error) {
+        console.error('Error fetching conversation:', error);
       }
     });
 
