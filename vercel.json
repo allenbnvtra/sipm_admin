@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "projects": [
+    {
+      "src": "API/vercel.json",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "client/vercel.json",
+      "use": "@vercel/static"
+    }
+  ]
+}
