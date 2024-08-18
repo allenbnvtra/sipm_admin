@@ -17,7 +17,7 @@ import messagesRoute from './routes/messagesRoute.js';
 dotenv.config({});
 
 const corsConfig = {
-  origin: process.env.FRONTEND_URL, // Ensure this is correct
+  origin: 'https://sipm-seven.vercel.app/', // Ensure this is correct
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
   headers: ['Content-Type'],
