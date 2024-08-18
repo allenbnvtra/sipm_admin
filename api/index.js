@@ -3,6 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import helmet from 'helmet';
 
 // routes
 import authRoute from './routes/authRoute.js';
@@ -18,12 +19,13 @@ dotenv.config({});
 const app = express();
 
 // middleware
+app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10kb' }));
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTEND_URL || '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
