@@ -47,11 +47,14 @@ const LoginPage = () => {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        console.log(error);
         const errorMessage =
           error.response?.data?.message ||
           'Login failed. Please check your credentials and try again.';
         toast.error(errorMessage, { id: toastId });
       } else {
+        console.log(error);
+
         toast.error('An unexpected error occurred. Please try again.', {
           id: toastId,
         });
