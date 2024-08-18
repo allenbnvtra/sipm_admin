@@ -4,6 +4,10 @@ import { IoIosSearch, IoMdMore } from 'react-icons/io';
 import { IoSend } from 'react-icons/io5';
 import { useAppSelector } from '../../../redux/hooks';
 import { useParams } from 'react-router-dom';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+import { BsEmojiSmile } from 'react-icons/bs';
+import axiosInstance from '../../../utils/axiosInstance';
+import { useQuery } from '@tanstack/react-query';
 
 const formatDate = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = {
@@ -18,6 +22,10 @@ const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('en-US', options).format(date);
 };
 
+interface MessageProps {
+  conversationId: string | null;
+}
+
 interface MessageType {
   text: string;
   msgByUserId: string;
@@ -29,7 +37,13 @@ interface GroupedMessages {
   messages: MessageType[];
 }
 
-const Messages = () => {
+const fetchMessages = async (convId: string) => {
+  return await axiosInstance
+    .get(`${import.meta.env.VITE_API_URL}/messages/${convId}`)
+    .then((response) => response.data.result);
+};
+
+const Messages = ({ conversationId }: MessageProps) => {
   const socketConnection = useAppSelector(
     (state) => state?.user.socketConnection
   );
@@ -48,7 +62,24 @@ const Messages = () => {
     createdAt: '',
   });
   const [allMessage, setAllMessage] = useState<MessageType[]>([]);
+  const [isEmojiOpen, setIsEmojiOpen] = useState<boolean>(false);
+
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ['messages', conversationId],
+    queryFn: () => {
+      if (conversationId) {
+        return fetchMessages(conversationId);
+      }
+      return Promise.reject(new Error('Conversation ID is null'));
+    },
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchIntervalInBackground: true,
+    retry: 1,
+    enabled: !!conversationId,
+  });
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -63,12 +94,24 @@ const Messages = () => {
     if (socketConnection && params.userId) {
       socketConnection.emit('message-page', params.userId);
 
+      socketConnection.emit('seen', params.userId);
+
       socketConnection.on('message-user', (data) => {
         setDataUser(data);
       });
 
-      socketConnection.on('message', (messages: MessageType[]) => {
-        setAllMessage(messages);
+      // Handle new messages
+      socketConnection.on('new-message', (message) => {
+        if (message.conversationId === conversationId) {
+          setAllMessage((prevMessages) => [...prevMessages, message]);
+        }
+      });
+
+      // Handle updated messages list
+      socketConnection.on('update-messages', (data) => {
+        if (data.conversationId === conversationId) {
+          setAllMessage(data.messages);
+        }
       });
 
       socketConnection.emit('get messages', {
@@ -76,11 +119,19 @@ const Messages = () => {
         receiver: params.userId,
       });
 
-      socketConnection.on('show messages', (messages: MessageType[]) => {
-        setAllMessage(messages);
-      });
+      if (data && data.messages) {
+        console.log('cached');
+        setAllMessage(data.messages);
+      }
     }
-  }, [socketConnection, params.userId, user.id]);
+
+    return () => {
+      if (socketConnection) {
+        socketConnection.off('new-message');
+        socketConnection.off('update-messages');
+      }
+    };
+  }, [socketConnection, params.userId, user.id, conversationId, data]);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -97,6 +148,7 @@ const Messages = () => {
           receiver: params.userId,
           text: message.text,
           msgByUserId: user.id,
+          conversationId, // Pass the conversation ID
         });
         setMessage({
           text: '',
@@ -146,7 +198,7 @@ const Messages = () => {
 
   return (
     <div className='w-full flex flex-col h-full'>
-      {params.userId ? (
+      {conversationId ? (
         <>
           <div className='flex items-center justify-between border-b p-3 shadow-sm'>
             <div className='flex'>
@@ -201,9 +253,9 @@ const Messages = () => {
                     <div
                       className={`${
                         msg.msgByUserId !== user.id
-                          ? 'bg-white text-slate-800 border-slate-200'
-                          : 'bg-blue-600 text-white border-blue-600'
-                      } border shadow-sm rounded-2xl px-3 py-2 text-sm mb-2 max-w-[16rem]`}
+                          ? 'bg-white text-slate-900 border-slate-200'
+                          : 'bg-indigo-200 text-slate-900 border-indigo-200'
+                      } border shadow-sm rounded-2xl px-3 py-2 text-md mb-2 max-w-[16rem]`}
                     >
                       {msg.text}
                     </div>
@@ -214,26 +266,46 @@ const Messages = () => {
           </div>
 
           <form
-            className='h-[4rem] flex gap-3 items-center p-3 border-t shadow-lg'
+            className='h-[4rem] flex gap-3 items-center p-3 border-t shadow-lg relative'
             onSubmit={handleSendMessage}
           >
-            <input
-              type='text'
-              placeholder='Type your message...'
-              className='flex-1 py-2 px-4 border border-slate-200 shadow-md rounded-2xl text-sm text-slate-800 focus:outline-none'
-              onChange={handleOnChange}
-              value={message.text}
-            />
-            <button className='rounded-full cursor-pointer hover:bg-slate-100 transition-all p-2 flex justify-center'>
-              <IoSend size={21} />
+            <div className='flex items-center relative w-full'>
+              <input
+                type='text'
+                placeholder='Type your message...'
+                className='flex-1 py-2 px-4 border border-slate-200 shadow-md rounded-2xl text-sm text-slate-800 focus:outline-none'
+                onChange={handleOnChange}
+                value={message.text}
+              />
+              <BsEmojiSmile
+                className='text-slate-600 text-2xl absolute right-4 cursor-pointer'
+                onClick={() => setIsEmojiOpen(!isEmojiOpen)}
+              />
+            </div>
+            <button
+              type='submit'
+              className='bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded-full shadow-lg'
+            >
+              <IoSend className='text-2xl' />
             </button>
+            {isEmojiOpen && (
+              <div className='absolute bottom-20 right-5'>
+                <EmojiPicker
+                  onEmojiClick={(emojiData: EmojiClickData) =>
+                    setMessage((prev) => ({
+                      ...prev,
+                      text: prev.text + emojiData.emoji,
+                    }))
+                  }
+                  height={400}
+                />
+              </div>
+            )}
           </form>
         </>
       ) : (
-        <div className='flex items-center justify-center h-full'>
-          <p className='text-lg text-gray-600'>
-            Welcome! Select a conversation to start chatting.
-          </p>
+        <div className='flex items-center justify-center flex-1'>
+          <p className='text-lg text-slate-700'>Select a conversation</p>
         </div>
       )}
     </div>

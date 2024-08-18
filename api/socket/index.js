@@ -69,6 +69,7 @@ io.on('connection', async (socket) => {
         const message = new Message({
           text: data.text,
           msgByUserId: data.msgByUserId,
+          conversationId: conversation._id, // Add conversationId here
         });
 
         const savedMessage = await message.save();
@@ -81,16 +82,22 @@ io.on('connection', async (socket) => {
           .populate('messages')
           .sort({ updatedAt: -1 });
 
-        io.to(data.sender).emit(
-          'message',
-          populatedConversation?.messages || []
-        );
+        const messagesWithConversationId = {
+          conversationId: conversation._id,
+          messages: populatedConversation?.messages,
+        };
+
+        // Emit new message to receiver
+        io.to(data.receiver).emit('new-message', message);
+
+        // Emit updated messages list to sender
+        io.to(data.sender).emit('update-messages', messagesWithConversationId);
+        // Emit updated messages list to receiver
         io.to(data.receiver).emit(
-          'message',
-          populatedConversation?.messages || []
+          'update-messages',
+          messagesWithConversationId
         );
 
-        // Send updated conversations
         const conversationSender = await getConversation(data?.sender);
         const conversationReceiver = await getConversation(data?.receiver);
 
@@ -101,14 +108,12 @@ io.on('connection', async (socket) => {
       }
     });
 
-    // Add this block to handle fetching messages for a specific conversation
     socket.on('get messages', async (data) => {
       try {
-        const conversationId = await findOrCreateConversation(
-          data?.sender,
-          data?.receiver
-        );
-        const conversation = await Conversation.findById(conversationId)
+        // Only fetch the conversation if it exists
+        const conversation = await Conversation.findOne({
+          participants: { $all: [data?.sender, data?.receiver] },
+        })
           .populate('messages')
           .sort({ updatedAt: -1 });
 
@@ -124,6 +129,34 @@ io.on('connection', async (socket) => {
         socket.emit('conversation', conversation);
       } catch (error) {
         console.error('Error fetching conversation:', error);
+      }
+    });
+
+    socket.on('seen', async (msgByUserId) => {
+      try {
+        const conversation = await Conversation.findOne({
+          $or: [
+            { sender: userId, receiver: msgByUserId },
+            { sender: msgByUserId, receiver: userId },
+          ],
+        });
+
+        if (!conversation) return;
+
+        const conversationMessageIds = conversation.messages;
+
+        await Message.updateMany(
+          { _id: { $in: conversationMessageIds }, msgByUserId },
+          { $set: { seen: true } }
+        );
+
+        // const conversationSender = await getConversation(userId);
+        // const conversationReceiver = await getConversation(msgByUserId);
+
+        // io.to(userId).emit('conversation', conversationSender);
+        // io.to(msgByUserId).emit('conversation', conversationReceiver);
+      } catch (error) {
+        console.error('Error handling seen status update:', error);
       }
     });
 

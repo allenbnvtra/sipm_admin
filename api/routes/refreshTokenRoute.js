@@ -28,14 +28,14 @@ router.post('/', async (req, res) => {
     const newRefreshToken = generateRefreshToken(userData.userId);
 
     res.cookie('token', newRefreshToken, {
-      maxAge: 30 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     });
 
     res.cookie('accessToken', newAccessToken, {
-      maxAge: 15 * 60 * 1000,
+      maxAge: 30 * 60 * 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

@@ -11,6 +11,7 @@ import adminWidgetsRoute from './routes/adminWidgetsRoute.js';
 import billsRoute from './routes/billsRoute.js';
 import tenantRoute from './routes/tenantRoute.js';
 import refreshTokenRoute from './routes/refreshTokenRoute.js';
+import messagesRoute from './routes/messagesRoute.js';
 
 dotenv.config({});
 
@@ -34,6 +35,7 @@ app.use('/api/v1/adminWidgets', adminWidgetsRoute);
 app.use('/api/v1/bills', billsRoute);
 app.use('/api/v1/tenants', tenantRoute);
 app.use('/api/v1/refresh', refreshTokenRoute);
+app.use('/api/v1/messages', messagesRoute);
 
 app.all('*', function (req, res) {
   return res.status(404).json({

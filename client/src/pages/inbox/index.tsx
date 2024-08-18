@@ -50,8 +50,6 @@ const InboxPage: React.FC = () => {
     }
   }, [socketConnection, user]);
 
-  console.log('conversation', conversation);
-
   return (
     <div className='flex h-[39rem] rounded-md border bg-white shadow-md'>
       <div className='w-[18rem] max-w-[18rem] border-r pr-1 shadow-md'>
@@ -67,7 +65,7 @@ const InboxPage: React.FC = () => {
             <input
               type='search'
               placeholder='Search Name...'
-              className='rounded-md bg-slate-200 py-2 pl-9 pr-3 text-xs text-slate-700 focus:outline-none sm:w-full'
+              className='rounded-md bg-slate-200 py-2 pl-9 pr-3 text-xs text-slate-700 border border-slate-200 focus:outline-none sm:w-full focus:bg-white focus:border focus:border-slate-200'
             />
             <IoSearchSharp className='absolute left-4 top-[8px] text-slate-500' />
           </div>
@@ -137,7 +135,7 @@ const InboxPage: React.FC = () => {
           })}
         </div>
       </div>
-      <Messages />
+      <Messages conversationId={selectedConversationId} />
     </div>
   );
 };

@@ -70,14 +70,14 @@ export const login = async (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
 
     res.cookie('token', refreshToken, {
-      maxAge: 30 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     });
 
     res.cookie('accessToken', accessToken, {
-      maxAge: 15 * 60 * 1000,
+      maxAge: 30 * 60 * 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
