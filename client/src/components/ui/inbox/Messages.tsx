@@ -66,7 +66,7 @@ const Messages = ({ conversationId }: MessageProps) => {
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['messages', conversationId],
     queryFn: () => {
       if (conversationId) {
@@ -195,6 +195,22 @@ const Messages = ({ conversationId }: MessageProps) => {
   };
 
   const groupedMessages = groupMessagesByTime(allMessage);
+
+  if (isLoading) {
+    return (
+      <div className='w-full h-full flex items-center justify-center'>
+        Loading...
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className='w-full h-full flex items-center justify-center'>
+        Error: {error.message}
+      </div>
+    );
+  }
 
   return (
     <div className='w-full flex flex-col h-full'>
