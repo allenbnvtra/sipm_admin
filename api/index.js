@@ -1,4 +1,4 @@
-// packages
+// index.js
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -18,22 +18,25 @@ dotenv.config({});
 
 const app = express();
 
-// middleware
+// Middleware
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10kb' }));
+
+// CORS configuration
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL],
+    origin: process.env.FRONTEND_URL, // Ensure this is correct
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
 );
 
+// Handle preflight requests
 app.options('*', cors());
 
-// routes
+// Routes
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/adminWidgets', adminWidgetsRoute);
