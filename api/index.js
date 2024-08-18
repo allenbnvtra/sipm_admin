@@ -37,6 +37,13 @@ app.use(
 app.options('*', cors());
 
 // Routes
+app.use('/api/v1/test', (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: 'Test successful. Server is successfully running!',
+  });
+});
+
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/adminWidgets', adminWidgetsRoute);
