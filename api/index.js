@@ -13,6 +13,8 @@ import billsRoute from './routes/billsRoute.js';
 import tenantRoute from './routes/tenantRoute.js';
 import refreshTokenRoute from './routes/refreshTokenRoute.js';
 import messagesRoute from './routes/messagesRoute.js';
+import User from './models/userModel.js';
+import { generateAccessToken, generateRefreshToken } from './helpers/token.js';
 
 dotenv.config({});
 
@@ -44,7 +46,93 @@ app.use('/api/v1/test', (req, res) => {
   });
 });
 
-app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/auth', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'All fields are required',
+      });
+    }
+
+    // Find the user
+    const user = await User.findOne({
+      email,
+      active: true,
+      role: 'admin',
+    }).select('+password +loginAttempts +lockUntil +role');
+
+    if (!user) {
+      return res.status(401).json({
+        status: 'fail',
+        message: 'Incorrect email or password',
+      });
+    }
+
+    // Check if the account is locked
+    if (user.lockUntil && user.lockUntil > Date.now()) {
+      return res.status(429).json({
+        status: 'fail',
+        message: 'Account locked. Please try again later.',
+      });
+    }
+
+    // Verify password and user status
+    const isPasswordCorrect = await user.correctPassword(
+      password,
+      user.password
+    );
+    if (!isPasswordCorrect) {
+      await handleFailedLogin(user);
+      return res.status(401).json({
+        status: 'fail',
+        message: 'Incorrect email or password',
+      });
+    }
+
+    // Reset login attempts and lockUntil
+    user.loginAttempts = 0;
+    user.lockUntil = undefined;
+    await user.save();
+
+    // Generate JWT token
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    res.cookie('token', refreshToken, {
+      maxAge: 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+
+    res.cookie('accessToken', accessToken, {
+      maxAge: 30 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+
+    return res.status(200).json({
+      status: 'success',
+      accessToken,
+      result: {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error('Error during login:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
+  }
+});
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/adminWidgets', adminWidgetsRoute);
 app.use('/api/v1/bills', billsRoute);
