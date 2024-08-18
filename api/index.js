@@ -31,6 +31,8 @@ app.use(
   })
 );
 
+app.options('*', cors());
+
 // routes
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
