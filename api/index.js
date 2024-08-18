@@ -32,15 +32,6 @@ app.use(
 );
 
 // routes
-app.use('/', (req, res) => {
-  try {
-    res.json({
-      message: 'hello world',
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/adminWidgets', adminWidgetsRoute);
