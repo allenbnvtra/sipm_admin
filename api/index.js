@@ -16,6 +16,12 @@ import messagesRoute from './routes/messagesRoute.js';
 
 dotenv.config({});
 
+const corsConfig = {
+  origin: process.env.FRONTEND_URL, // Ensure this is correct
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  credentials: true,
+};
+
 const app = express();
 
 // Middleware
@@ -25,16 +31,8 @@ app.use(cookieParser());
 app.use(express.json({ limit: '10kb' }));
 
 // CORS configuration
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL, // Ensure this is correct
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  })
-);
-
-// Handle preflight requests
-app.options('*', cors());
+app.options('', cors(corsConfig));
+app.use(cors(corsConfig));
 
 // Routes
 app.use('/api/v1/test', (req, res) => {
