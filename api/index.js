@@ -21,6 +21,7 @@ const corsConfig = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Type', 'Authorization'],
 };
 
 const app = express();
@@ -30,7 +31,7 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10kb' }));
-app.use(cors(corsConfig));
+app.use(cors());
 
 // Routes
 app.use('/api/v1/test', (req, res) => {
