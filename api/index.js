@@ -14,13 +14,13 @@ import tenantRoute from './routes/tenantRoute.js';
 import refreshTokenRoute from './routes/refreshTokenRoute.js';
 import messagesRoute from './routes/messagesRoute.js';
 
-dotenv.config({});
+dotenv.config();
 
 const corsConfig = {
   origin: process.env.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
-  headers: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 const app = express();
@@ -30,9 +30,6 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10kb' }));
-
-// CORS configuration
-app.options('', cors(corsConfig));
 app.use(cors(corsConfig));
 
 // Routes
