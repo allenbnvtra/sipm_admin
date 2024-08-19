@@ -13,7 +13,6 @@ import billsRoute from './routes/billsRoute.js';
 import tenantRoute from './routes/tenantRoute.js';
 import refreshTokenRoute from './routes/refreshTokenRoute.js';
 import messagesRoute from './routes/messagesRoute.js';
-import User from './models/userModel.js';
 
 dotenv.config();
 
@@ -54,15 +53,7 @@ app.use('/api/v1/test', (req, res) => {
   });
 });
 
-app.use('/getTenant', async (req, res) => {
-  try {
-    const user = await User.find();
-
-    return res.json({ user });
-  } catch (error) {
-    console.log(error);
-  }
-});
+app.use('/getTenant', authRoute);
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/adminWidgets', adminWidgetsRoute);
