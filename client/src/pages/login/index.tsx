@@ -27,7 +27,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
+        `https://sipm-prod.vercel.app/api/v1/auth/login`,
         data,
         { withCredentials: true }
       );

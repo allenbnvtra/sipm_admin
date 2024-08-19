@@ -3,7 +3,7 @@ import { store } from '../redux/store';
 import { logout, setAuth } from '../redux/slices/userSlice';
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: 'https://sipm-prod.vercel.app/api/v1',
   headers: {
     'Content-type': 'application/json',
   },

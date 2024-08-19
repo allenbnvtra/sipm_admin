@@ -53,7 +53,6 @@ app.use('/api/v1/test', (req, res) => {
   });
 });
 
-app.use('/getTenant', authRoute);
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/adminWidgets', adminWidgetsRoute);
