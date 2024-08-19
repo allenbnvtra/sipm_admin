@@ -9,7 +9,7 @@ import { isAdmin, isAuthenticated } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.use(isAuthenticated, isAdmin);
+// router.use(isAuthenticated, isAdmin);
 router.get('/getWidgetData', getUserData);
 router.get('/getTenantData', getTenantData);
 router.get(
