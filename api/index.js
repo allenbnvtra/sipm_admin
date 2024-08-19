@@ -31,7 +31,7 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10kb' }));
-app.use(cors());
+app.use(cors(corsConfig));
 
 // Routes
 app.use('/api/v1/test', (req, res) => {
