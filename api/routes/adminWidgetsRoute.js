@@ -5,9 +5,11 @@ import {
   getTenantData,
   getUserData,
 } from '../controllers/adminWidgetController.js';
+import { isAdmin, isAuthenticated } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+router.use(isAuthenticated, isAdmin);
 router.get('/getWidgetData', getUserData);
 router.get('/getTenantData', getTenantData);
 router.get(
