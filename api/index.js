@@ -18,11 +18,23 @@ import User from './models/userModel.js';
 dotenv.config();
 
 const corsConfig = {
-  origin: process.env.FRONTEND_URL,
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      process.env.FRONTEND_URL,
+      'https://sipm-git-main-allenbnvtras-projects.vercel.app',
+      'https://sipm-allenbnvtras-projects.vercel.app',
+    ];
+
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
+  optionSuccessStatus: 204,
   allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Content-Type', 'Authorization'],
 };
 
 const app = express();
