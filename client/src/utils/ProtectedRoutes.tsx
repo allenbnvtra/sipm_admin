@@ -14,7 +14,7 @@ const ProtectedRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const socketConnection: Socket = io('http://localhost:51003/', {
+    const socketConnection: Socket = io(import.meta.env.VITE_BASE_API_URL, {
       auth: {
         token: localStorage.getItem('token'),
       },

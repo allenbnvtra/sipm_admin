@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 
-const URL = 'http://localhost:51003';
+const URL = import.meta.env.VITE_BASE_API_URL;
 
 const socket: Socket = io(URL, {
   auth: {
