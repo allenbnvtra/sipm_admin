@@ -3,7 +3,7 @@ import { store } from '../redux/store';
 import { logout, setAuth } from '../redux/slices/userSlice';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:51003/api',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-type': 'application/json',
   },
@@ -37,35 +37,78 @@ const refreshToken = async () => {
 };
 
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async function (error) {
     const originalRequest = error.config;
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const resp = await refreshToken();
+      try {
+        const resp = await refreshToken();
 
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-      // Dispatch action to update token in Redux store
-      store.dispatch(
-        setAuth({
-          token: resp.accessToken,
-          user,
-        })
-      );
+        // Dispatch action to update token in Redux store
+        store.dispatch(
+          setAuth({
+            token: resp.accessToken,
+            user,
+          })
+        );
 
-      const access_token = resp.accessToken;
+        const access_token = resp.accessToken;
 
-      localStorage.setItem('token', access_token);
-      axiosInstance.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${access_token}`;
-      return axiosInstance(originalRequest);
+        localStorage.setItem('token', access_token);
+        axiosInstance.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${access_token}`;
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        // Handle token refresh error
+        return Promise.reject(refreshError);
+      }
     }
+
+    return Promise.reject(error);
+  }
+);
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async function (error) {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const resp = await refreshToken();
+
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        // Update token in Redux store
+        store.dispatch(
+          setAuth({
+            token: resp.accessToken,
+            user,
+          })
+        );
+
+        const access_token = resp.accessToken;
+
+        localStorage.setItem('token', access_token);
+        axiosInstance.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${access_token}`;
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        // Optionally log out user or redirect to login
+        store.dispatch(logout());
+        return Promise.reject(refreshError);
+      }
+    }
+
     return Promise.reject(error);
   }
 );
