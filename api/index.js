@@ -17,7 +17,7 @@ import messagesRoute from './routes/messagesRoute.js';
 dotenv.config({});
 
 const corsConfig = {
-  origin: '*', // Ensure this is correct
+  origin: process.env.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
   headers: ['Content-Type'],
