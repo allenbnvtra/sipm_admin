@@ -18,11 +18,7 @@ dotenv.config();
 
 const corsConfig = {
   origin: (origin, callback) => {
-    const allowedOrigins = [
-      process.env.FRONTEND_URL,
-      'https://sipm-git-main-allenbnvtras-projects.vercel.app',
-      'https://sipm-allenbnvtras-projects.vercel.app',
-    ];
+    const allowedOrigins = [process.env.FRONTEND_URL];
 
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
