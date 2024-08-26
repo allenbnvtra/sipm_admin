@@ -68,7 +68,6 @@ const TenantsPage = () => {
 
   const handleFilterChange = (filter: string) => {
     setQuery(filter);
-    console.log(`Filter selected: ${filter}`);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { FaClock } from 'react-icons/fa';
 import { MdOutlineEventNote } from 'react-icons/md';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axiosInstance from '../../../utils/axiosInstance';
+import { useState } from 'react';
+import ViewBillsModal from '../modal/ViewBillModal/ViewBillsModal';
+import { formatBillingPeriod, formatCurrency } from '../../../helpers';
 
 interface MonthlyBillPerTenant {
   id: string;
@@ -46,6 +49,9 @@ const fetchMonthlyBillPerTenant = async (
 
 const MonthlyBill = ({ year }: MonthlyBillProps) => {
   const { tenantId } = useParams<{ tenantId: string }>();
+  const [isViewBillModalOpen, setIsViewBillModalOpen] =
+    useState<boolean>(false);
+  const [billId, setBillId] = useState<string | null>(null);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['tenantMonthlyBill', year, tenantId],
@@ -54,21 +60,13 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
     retry: 1,
   });
 
-  const formatBillingPeriod = (date: Date): string => {
-    const options: Intl.DateTimeFormatOptions = {
-      month: 'long',
-      year: 'numeric',
+  const handleOpenBillModal =
+    (billId: string) =>
+    (event: React.MouseEvent<HTMLDivElement>): void => {
+      event.preventDefault();
+      setIsViewBillModalOpen(true);
+      setBillId(billId);
     };
-
-    return new Intl.DateTimeFormat('en-US', options).format(date);
-  };
-
-  const formatCurrency = (amount: number): string => {
-    return amount.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'PHP',
-    });
-  };
 
   if (isLoading) {
     return (
@@ -100,8 +98,8 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
     <>
       {data.result.map((bill) => (
         <div key={bill.id}>
-          <Link
-            to={`/bills/${bill.id}`}
+          <div
+            onClick={handleOpenBillModal(bill.id)}
             className='cursor-pointer hover:bg-slate-50 transition-all border-b'
           >
             <div className='flex justify-between items-center p-3 bg-slate-200 text-xs'>
@@ -152,9 +150,14 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
                 </p>
               </div>
             </div>
-          </Link>
+          </div>
         </div>
       ))}
+      <ViewBillsModal
+        billId={billId}
+        isViewBillsModalOpen={isViewBillModalOpen}
+        closeViewBillsModal={() => setIsViewBillModalOpen(false)}
+      />
     </>
   );
 };

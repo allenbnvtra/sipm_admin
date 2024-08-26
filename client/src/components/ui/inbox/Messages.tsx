@@ -120,7 +120,6 @@ const Messages = ({ conversationId }: MessageProps) => {
       });
 
       if (data && data.messages) {
-        console.log('cached');
         setAllMessage(data.messages);
       }
     }

@@ -2,9 +2,9 @@ import { IoSearchSharp } from 'react-icons/io5';
 import { FaAngleLeft, FaAngleRight, FaRegListAlt } from 'react-icons/fa';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import ViewBillsModal from '../modal/ViewBillsModal';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../../../utils/axiosInstance';
+import { formatCurrency } from '../../../helpers';
 
 interface TenantsData {
   id: string;
@@ -40,7 +40,6 @@ const fetchTenants = async (
 const DashboardTable = () => {
   const [searchTenant, setSearchTenant] = useState<string>('');
   const [page, setPage] = useState<number>(1);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['tenants', page, searchTenant],
@@ -231,12 +230,11 @@ const DashboardTable = () => {
                       <td className='t_column'>{tenant.stallNumber}</td>
                       <td className='t_column'>{tenant.username}</td>
                       <td className='t_column'>
-                        &#8369; {tenant.balance.toLocaleString()}
+                        {formatCurrency(tenant.balance)}
                       </td>
                       <td className='flex items-center justify-center gap-2 py-3 text-lg md:text-[16px]'>
                         <Link to={`/tenants/${tenant.id}`}>
                           <FaRegListAlt
-                            onClick={() => setIsModalOpen(true)}
                             title='View Bills'
                             className='cursor-pointer text-blue-700'
                           />
@@ -281,10 +279,6 @@ const DashboardTable = () => {
           </div>
         </div>
       </div>
-      <ViewBillsModal
-        isViewBillsModalOpen={isModalOpen}
-        closeViewBillsModal={() => setIsModalOpen(false)}
-      />
     </>
   );
 };

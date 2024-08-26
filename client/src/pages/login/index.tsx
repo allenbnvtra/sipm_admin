@@ -27,7 +27,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        `https://sipm-prod.vercel.app/api/v1/auth/login`,
+        `${import.meta.env.VITE_API_URL}/auth/login`,
         data,
         { withCredentials: true }
       );
@@ -47,14 +47,11 @@ const LoginPage = () => {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
         const errorMessage =
           error.response?.data?.message ||
           'Login failed. Please check your credentials and try again.';
         toast.error(errorMessage, { id: toastId });
       } else {
-        console.log(error);
-
         toast.error('An unexpected error occurred. Please try again.', {
           id: toastId,
         });

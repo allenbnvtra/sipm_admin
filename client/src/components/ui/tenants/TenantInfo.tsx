@@ -94,7 +94,7 @@ const TenantInfo = () => {
 
         <div className='flex justify-center gap-3 px-2 pb-5'>
           <div
-            onClick={() => setIsEditable(!isEditable)}
+            // onClick={() => setIsEditable(!isEditable)}
             className='flex items-center text-blue-600 gap-1 bg-blue-200 rounded-md px-3 cursor-pointer py-2 hover:bg-blue-300 transition-all'
           >
             <FaEdit size={15} />
