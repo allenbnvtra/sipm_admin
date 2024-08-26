@@ -213,7 +213,7 @@ const Messages = ({ conversationId }: MessageProps) => {
 
   return (
     <div className='w-full flex flex-col h-full'>
-      {conversationId ? (
+      {conversationId || params.userId ? (
         <>
           <div className='flex items-center justify-between border-b p-3 shadow-sm'>
             <div className='flex'>
