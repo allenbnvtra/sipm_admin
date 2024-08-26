@@ -7,7 +7,6 @@ import { Link, useParams } from 'react-router-dom';
 import { AiOutlineMessage } from 'react-icons/ai';
 import { FaArchive, FaEdit } from 'react-icons/fa';
 import { IoPersonCircle } from 'react-icons/io5';
-import { CiEdit } from 'react-icons/ci';
 import { MdAlternateEmail, MdOutlinePlace } from 'react-icons/md';
 import axiosInstance from '../../../utils/axiosInstance';
 
@@ -28,7 +27,7 @@ const fetchTenantInfo = async (tenantId: string): Promise<TenantInfo> => {
 
 const TenantInfo = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [isEditable, setIsEditable] = useState<boolean>(false);
+  // const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const { tenantId } = useParams<{ tenantId: string }>();
   const { data, isLoading, isError, error } = useQuery<TenantInfo>({
@@ -77,15 +76,15 @@ const TenantInfo = () => {
                   title={data?.name}
                   className='flex justify-center gap-1 items-center font-medium text-center text-ellipsis text-lg text-slate-800 mt-2 overflow-hidden whitespace-nowrap w-[14rem]'
                 >
-                  {data?.name} {isEditable && <CiEdit size={18} />}
+                  {data?.name}
                 </p>
                 <p className='font-light text-xs text-slate-700 mt-2 flex gap-1'>
                   <MdAlternateEmail className='text-md text-slate-900' />
-                  {data?.email} {isEditable && <CiEdit size={18} />}
+                  {data?.email}
                 </p>
                 <p className='font-light text-xs text-slate-700 mt-1 flex gap-1'>
                   <MdOutlinePlace className='text-md text-slate-900' />
-                  {data?.stallNumber} {isEditable && <CiEdit size={18} />}
+                  {data?.stallNumber}
                 </p>
               </>
             )
@@ -98,9 +97,7 @@ const TenantInfo = () => {
             className='flex items-center text-blue-600 gap-1 bg-blue-200 rounded-md px-3 cursor-pointer py-2 hover:bg-blue-300 transition-all'
           >
             <FaEdit size={15} />
-            <p className='text-xs font-medium'>
-              {isEditable ? 'Cancel' : 'Edit'}
-            </p>
+            <p className='text-xs font-medium'>Edit</p>
           </div>
           <div
             onClick={() => setIsDeleteModalOpen(true)}

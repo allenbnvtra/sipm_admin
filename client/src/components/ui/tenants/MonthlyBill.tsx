@@ -6,6 +6,7 @@ import axiosInstance from '../../../utils/axiosInstance';
 import { useState } from 'react';
 import ViewBillsModal from '../modal/ViewBillModal/ViewBillsModal';
 import { formatBillingPeriod, formatCurrency } from '../../../helpers';
+import { IoIosAddCircleOutline } from 'react-icons/io';
 
 interface MonthlyBillPerTenant {
   id: string;
@@ -153,6 +154,20 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
           </div>
         </div>
       ))}
+
+      <div className='cursor-pointer hover:bg-slate-50 transition-all border-b'>
+        <div className='flex justify-between items-center p-3 bg-slate-200 text-xs'>
+          <p className='font-semibold text-md text-indigo-900 flex items-center gap-1'>
+            <MdOutlineEventNote className='text-lg' />
+            {formatBillingPeriod(new Date())}
+          </p>
+        </div>
+
+        <div className='px-5 py-7 flex justify-center items-center gap-2 text-indigo-800'>
+          <IoIosAddCircleOutline size={30} /> Add new bill
+        </div>
+      </div>
+
       <ViewBillsModal
         billId={billId}
         isViewBillsModalOpen={isViewBillModalOpen}

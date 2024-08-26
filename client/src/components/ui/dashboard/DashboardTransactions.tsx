@@ -30,7 +30,7 @@ const DashboardTransactions = () => {
 
   if (isLoading) {
     return (
-      <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md'>
+      <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[21rem]'>
         <div className='flex justify-between'>
           <p className='pt-1 text-sm font-medium text-slate-600'>
             Recent Transaction
@@ -72,7 +72,7 @@ const DashboardTransactions = () => {
 
   if (isError) {
     return (
-      <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md'>
+      <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[21rem]'>
         <div className='flex justify-between'>
           <p className='pt-1 text-sm font-medium text-slate-700'>
             Recent Transaction
@@ -89,7 +89,7 @@ const DashboardTransactions = () => {
   }
 
   return (
-    <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md'>
+    <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[21rem]'>
       <div className='flex justify-between'>
         <p className='pt-1 text-sm font-medium text-slate-600'>
           Recent Transaction

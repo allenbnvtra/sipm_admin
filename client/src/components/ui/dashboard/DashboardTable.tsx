@@ -202,7 +202,7 @@ const DashboardTable = () => {
           </div>
         </div>
 
-        <div className='relative z-0 mt-4 h-[26.1rem] overflow-hidden rounded-md border border-slate-300 bg-white shadow-md'>
+        <div className='relative z-0 mt-4 h-[27.1rem] xxl:h-[29.5rem] overflow-hidden rounded-md border border-slate-300 bg-white shadow-md'>
           <div className='h-[calc(100%-3rem)] overflow-y-auto scrollbar-hide'>
             <table className='w-full'>
               <thead className='sticky top-0 text-sm'>

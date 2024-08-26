@@ -8,6 +8,7 @@ export default {
       md: '960px',
       lg: '1180px',
       xl: '1280px',
+      xxl: '1400px',
     },
     extend: {
       fontSize: {
