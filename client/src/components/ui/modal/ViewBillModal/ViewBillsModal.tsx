@@ -113,8 +113,9 @@ const ViewBillsModal = ({
               data={data}
               closePaymentModal={() => setIsPaymentModalOpen(false)}
             />
-          ) : isTransactionModalOpen && data ? (
+          ) : isTransactionModalOpen && data && billId ? (
             <Transactions
+              billId={billId}
               closeTransactionModal={() => setIsTransactionModalOpen(false)}
             />
           ) : (

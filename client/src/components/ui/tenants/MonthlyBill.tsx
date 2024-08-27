@@ -156,15 +156,10 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
       ))}
 
       <div className='cursor-pointer hover:bg-slate-50 transition-all border-b'>
-        <div className='flex justify-between items-center p-3 bg-slate-200 text-xs'>
-          <p className='font-semibold text-md text-indigo-900 flex items-center gap-1'>
-            <MdOutlineEventNote className='text-lg' />
-            {formatBillingPeriod(new Date())}
-          </p>
-        </div>
+        <div className='flex justify-between items-center p-3 bg-slate-200 text-xs'></div>
 
-        <div className='px-5 py-7 flex justify-center items-center gap-2 text-indigo-800'>
-          <IoIosAddCircleOutline size={30} /> Add new bill
+        <div className='px-5 py-7 flex flex-col justify-center items-center text-indigo-800'>
+          <IoIosAddCircleOutline size={35} /> Add new bill
         </div>
       </div>
 

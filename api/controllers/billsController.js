@@ -1,4 +1,5 @@
 import Month from '../models/monthlyModel.js';
+import Payment from '../models/paymentModel.js';
 
 export const getAllBills = async (req, res) => {
   try {
@@ -37,6 +38,30 @@ export const getBill = async (req, res) => {
     return res.status(200).json({
       status: 'success',
       result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
+  }
+};
+
+export const getBillTransactions = async (req, res) => {
+  try {
+    const transactions = await Payment.find({ bill: req.params.billId });
+
+    const result = transactions.map((transaction) => ({
+      transactionId: transaction._id,
+      billingDate: transaction.bill.billingPeriod,
+      receiptNo: transaction.receiptNo,
+      paymentAmount: transaction.paymentAmount,
+      paymentDate: transaction.paymentDate,
+    }));
+
+    return res.status(200).json({
+      status: 'success',
+      result: result,
     });
   } catch (error) {
     return res.status(500).json({

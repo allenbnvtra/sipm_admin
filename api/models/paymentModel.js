@@ -68,7 +68,7 @@ paymentSchema.pre('save', async function (next) {
 paymentSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'bill',
-    select: 'remainingBalance',
+    select: 'remainingBalance billingPeriod',
   });
   next();
 });
