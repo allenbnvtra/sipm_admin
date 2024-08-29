@@ -40,7 +40,7 @@ const ProtectedRoutes: React.FC = () => {
       <Sidebar />
       <div className='w-full'>
         <Header />
-        <div className='bg-gray-100 p-3 md:px-6'>
+        <div className='bg-gray-100 p-3 md:px-[3rem]'>
           <Outlet />
         </div>
         <div className='sticky bottom-0'>

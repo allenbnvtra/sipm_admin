@@ -258,7 +258,7 @@ const DashboardTable = () => {
           <div className='absolute bottom-0 left-0 w-full rounded-b-md bg-slate-700 text-white'>
             <div className='flex w-full items-center gap-3 border-t px-5 py-4 text-xs'>
               <p>
-                {(page - 1) * 10 + 1}-{Math.min(page * 10, totalUsersCount)} of{' '}
+                {(page - 1) * 20 + 1}-{Math.min(page * 20, totalUsersCount)} of{' '}
                 {totalUsersCount}
               </p>
               <div className='flex gap-3 text-sm'>

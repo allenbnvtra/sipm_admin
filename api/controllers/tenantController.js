@@ -5,7 +5,7 @@ import User from '../models/userModel.js';
 export const getAllTenants = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = 10;
+    const limit = 20;
     const skip = (page - 1) * limit;
     const search = req.query.search || '';
     const sort = req.query.sort || ''; // Get the sort parameter

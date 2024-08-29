@@ -42,7 +42,7 @@ const Graph = () => {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className='relative h-full p-4 text-center flex justify-center items-center text-sm text-slate-700 xxl:h-[21.5rem]'>
+        <div className='relative h-full p-4 text-center flex justify-center items-center text-sm text-slate-700 xxl:h-[21.5rem] xxxl:h-[25rem]'>
           Loading...
         </div>
       );
@@ -50,21 +50,21 @@ const Graph = () => {
 
     if (isError) {
       return (
-        <div className='relative h-full p-4 text-center flex justify-center items-center text-sm text-red-600 xxl:h-[21.5rem]'>
+        <div className='relative h-full p-4 text-center flex justify-center items-center text-sm text-red-600 xxl:h-[21.5rem] xxxl:h-[25rem]'>
           Error: {error.message}
         </div>
       );
     }
 
     return (
-      <div className='relative h-full p-4'>
+      <div className='relative h-full p-4 xxxl:h-[25rem]'>
         <Doughnut data={chartData} options={chartOptions} />
       </div>
     );
   };
 
   return (
-    <div className='mt-3 flex h-[20rem] max-h-[21.5rem] flex-col justify-center rounded-md border border-slate-200 bg-white p-3 shadow-lg xxl:h-[21.5rem]'>
+    <div className='mt-3 flex h-[20rem] max-h-[21.5rem] flex-col justify-center rounded-md border border-slate-200 bg-white p-3 shadow-lg xxl:h-[21.5rem] xxxl:h-[25rem]'>
       <p className='pt-1 text-sm font-medium text-slate-600'>
         Chart for {data?.billingMonth || ''}
       </p>

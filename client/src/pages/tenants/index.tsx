@@ -142,7 +142,7 @@ const TenantsPage = () => {
         <div className='h-[calc(100%-3rem)] overflow-y-auto scrollbar-hide rounded-t-md'>
           {isLoading ? (
             <div className='flex w-full justify-center items-center h-full'>
-              <p className='flex justify-center absolute top-[250px] left-[500px] text-slate-800 text-xs'>
+              <p className='flex justify-center text-slate-800 text-xs'>
                 Loading...
               </p>
             </div>
@@ -218,8 +218,8 @@ const TenantsPage = () => {
             <p>
               {isLoading
                 ? 'Loading...'
-                : `${(page - 1) * 10 + 1}-${Math.min(
-                    page * 10,
+                : `${(page - 1) * 20 + 1}-${Math.min(
+                    page * 20,
                     totalUsersCount
                   )} of${' '}
               ${totalUsersCount}`}

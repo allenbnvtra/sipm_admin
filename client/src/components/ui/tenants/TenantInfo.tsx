@@ -74,7 +74,7 @@ const TenantInfo = () => {
 
                 <p
                   title={data?.name}
-                  className='flex justify-center gap-1 items-center font-medium text-center text-ellipsis text-lg text-slate-800 mt-2 overflow-hidden whitespace-nowrap w-[14rem]'
+                  className='font-medium text-center text-ellipsis text-lg text-slate-800 mt-2 overflow-hidden whitespace-nowrap w-[14rem]'
                 >
                   {data?.name}
                 </p>

@@ -57,7 +57,7 @@ const Transactions = ({ closeTransactionModal, billId }: TransactionsProps) => {
           data.map((transaction) => (
             <div
               key={transaction.transactionId}
-              className='flex justify-between text-sm text-slate-700 border p-4 rounded-md border-slate-300 mb-3'
+              className='flex justify-between text-sm text-slate-700 border p-4 rounded-md border-slate-200 shadow-md mb-3'
             >
               <div className='pr-2'>
                 <p className='whitespace-nowrap w-[11rem] sm:w-auto max-w-[13rem] text-ellipsis overflow-hidden'>
@@ -80,7 +80,7 @@ const Transactions = ({ closeTransactionModal, billId }: TransactionsProps) => {
                 </p>
               </div>
               <div>
-                <p className='text-blue-700 font-semibold'>
+                <p className='text-blue-700 font-semibold text-normal'>
                   {formatCurrency(transaction.paymentAmount)}
                 </p>
                 <p className='text-end text-green-400 underline cursor-pointer'>
