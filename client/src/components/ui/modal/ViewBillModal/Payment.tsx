@@ -39,6 +39,8 @@ const Payment = ({ data, closePaymentModal }: PaymentProps) => {
           name='paymentDate'
           id='paymentDate'
           className='px-2 text-sm border-b border-gray-400 focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
+          placeholder='mm/dd/yyyy'
+          pattern='\d{2}/\d{2}/\d{4}'
         />
       </div>
 

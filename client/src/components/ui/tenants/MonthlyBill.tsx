@@ -7,12 +7,13 @@ import { useState } from 'react';
 import ViewBillsModal from '../modal/ViewBillModal/ViewBillsModal';
 import { formatBillingPeriod, formatCurrency } from '../../../helpers';
 import { IoIosAddCircleOutline } from 'react-icons/io';
+import AddBillModal from '../modal/AddBillModal';
 
 interface MonthlyBillPerTenant {
   id: string;
   billingPeriod: Date;
   status: string;
-  amountPaid: number;
+  totalKwh: number;
   meterNumber: string;
   remainingBalance: number;
 }
@@ -52,6 +53,7 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
   const { tenantId } = useParams<{ tenantId: string }>();
   const [isViewBillModalOpen, setIsViewBillModalOpen] =
     useState<boolean>(false);
+  const [isAddBillModalOpen, setIsAddBillModalOpen] = useState<boolean>(false);
   const [billId, setBillId] = useState<string | null>(null);
 
   const { data, isLoading, isError, error } = useQuery({
@@ -95,6 +97,12 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
     );
   }
 
+  const sortedBills = [...data.result].sort(
+    (a, b) => b.billingPeriod.getTime() - a.billingPeriod.getTime()
+  );
+
+  const latestBill = sortedBills[0];
+
   return (
     <>
       {data.result.map((bill) => (
@@ -136,11 +144,9 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
               </div>
               <div className='text-xs flex flex-col items-center'>
                 <p className='mb-1 text-md font-semibold text-slate-600'>
-                  Amount Paid
+                  Meter Reading
                 </p>
-                <p className='py-[2px] text-slate-800'>
-                  {formatCurrency(bill.amountPaid)}
-                </p>
+                <p className='py-[2px] text-slate-800'>{bill.totalKwh}</p>
               </div>
               <div className='text-xs flex flex-col items-center'>
                 <p className='mb-1 text-md font-semibold text-slate-600'>
@@ -158,7 +164,10 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
       <div className='cursor-pointer hover:bg-slate-50 transition-all border-b'>
         <div className='flex justify-between items-center p-3 bg-slate-200 text-xs'></div>
 
-        <div className='px-5 py-7 flex flex-col justify-center items-center text-indigo-800'>
+        <div
+          className='px-5 py-7 flex flex-col justify-center items-center text-indigo-800'
+          onClick={() => setIsAddBillModalOpen(true)}
+        >
           <IoIosAddCircleOutline size={35} /> Add new bill
         </div>
       </div>
@@ -167,6 +176,12 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
         billId={billId}
         isViewBillsModalOpen={isViewBillModalOpen}
         closeViewBillsModal={() => setIsViewBillModalOpen(false)}
+      />
+      <AddBillModal
+        isAddBillModalOpen={isAddBillModalOpen}
+        closeAddBillModal={() => setIsAddBillModalOpen(false)}
+        previousReading={latestBill?.totalKwh}
+        meterNumber={latestBill?.meterNumber}
       />
     </>
   );

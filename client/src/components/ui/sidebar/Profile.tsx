@@ -52,10 +52,10 @@ const Profile = () => {
         <IoPersonCircle className='mr-1 text-5xl text-[#1c3153]' />
         <div className='flex w-full items-center justify-between pr-2'>
           <div className='text-xs flex-1 overflow-hidden'>
-            <p className='font-semibold w-[7rem] text-slate-800 overflow-hidden whitespace-nowrap text-ellipsis'>
+            <p className='font-semibold w-[7rem] text-slate-800 overflow-hidden whitespace-nowrap text-ellipsis capitalize'>
               {name}
             </p>
-            <p className='text-xs w-[7rem] font-light text-slate-700 overflow-hidden whitespace-nowrap text-ellipsis'>
+            <p className='text-xs w-[7rem] font-light text-slate-700 overflow-hidden whitespace-nowrap text-ellipsis lowercase'>
               @{email}
             </p>
           </div>

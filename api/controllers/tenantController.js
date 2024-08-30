@@ -138,7 +138,9 @@ export const getTenantBill = async (req, res) => {
     }
 
     const bills = await Month.find({ user: tenantId })
-      .select('billingPeriod status meterNumber totalPaid remainingBalance')
+      .select(
+        'billingPeriod status meterNumber remainingBalance currentReading'
+      )
       .lean();
 
     const filteredBills = bills.filter((bill) => {
@@ -151,7 +153,7 @@ export const getTenantBill = async (req, res) => {
       billingPeriod: bill.billingPeriod,
       status: bill.status,
       meterNumber: bill.meterNumber,
-      amountPaid: bill.totalPaid,
+      totalKwh: bill.currentReading,
       remainingBalance: bill.remainingBalance,
     }));
 

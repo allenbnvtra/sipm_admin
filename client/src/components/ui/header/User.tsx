@@ -32,7 +32,7 @@ const User = () => {
     >
       <div className='flex items-center gap-1'>
         <IoPersonCircleSharp className='text-2xl' />
-        <p className='text-xs w-[3.7rem] overflow-hidden whitespace-nowrap text-ellipsis'>
+        <p className='text-xs w-[3.7rem] overflow-hidden whitespace-nowrap text-ellipsis lowercase'>
           {email}
         </p>
       </div>
@@ -47,7 +47,7 @@ const User = () => {
           </Link>
           <p
             className='flex items-center gap-1 px-4 py-3 text-xs text-gray-800 hover:rounded-b-md hover:bg-gray-100 cursor-pointer'
-            onClick={handleLogout} // Add onClick handler to logout
+            onClick={handleLogout}
           >
             <MdLogout className='text-lg' />
             Logout
