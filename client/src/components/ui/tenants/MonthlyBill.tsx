@@ -110,8 +110,6 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
   const nextBillingPeriod = new Date(latestBill.billingPeriod);
   if (latestBill) {
     nextBillingPeriod.setMonth(nextBillingPeriod.getMonth() + 1);
-
-    console.log('Next Billing Period:', formatBillingPeriod(nextBillingPeriod));
   }
 
   return (

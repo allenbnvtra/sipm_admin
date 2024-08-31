@@ -29,10 +29,6 @@ interface NewBillResponse {
   result: object;
 }
 
-const getEndOfMonth = (date: Date): Date => {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-};
-
 const AddBillModal = ({
   userId,
   meterNumber,
@@ -44,8 +40,6 @@ const AddBillModal = ({
 }: AddBillModalProps) => {
   const [totalConsumption, setTotalConsumption] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
-
-  const endOfMonth = getEndOfMonth(nextBillingPeriod);
 
   useEffect(() => {
     if (isAddBillModalOpen) {
@@ -69,7 +63,7 @@ const AddBillModal = ({
     defaultValues: {
       meterNumber: meterNumber,
       previousReading: previousReading,
-      billingPeriod: endOfMonth.toISOString().split('T')[0],
+      billingPeriod: nextBillingPeriod.toISOString().split('T')[0],
     },
   });
 

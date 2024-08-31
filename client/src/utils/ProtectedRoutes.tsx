@@ -3,12 +3,12 @@ import { Navigate, Outlet } from 'react-router-dom';
 import Sidebar from '../components/ui/sidebar/Sidebar';
 import Header from '../components/ui/header/Header';
 import MobileNav from '../components/ui/mobileNav/MobileNav';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch } from '../redux/hooks';
 import { io, Socket } from 'socket.io-client';
 import { setSocketConnection } from '../redux/slices/userSlice';
 
 const ProtectedRoutes: React.FC = () => {
-  const token = useAppSelector((state) => state.user.token);
+  const token = localStorage.getItem('token');
   const isAuthenticated = !!token;
 
   const dispatch = useAppDispatch();
