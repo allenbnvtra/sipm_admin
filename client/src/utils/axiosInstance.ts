@@ -21,6 +21,7 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    localStorage.removeItem('token');
     store.dispatch(logout());
     return Promise.reject(error);
   }
@@ -31,6 +32,7 @@ const refreshToken = async () => {
     const resp = await axiosInstance.post('/api/v1/refresh');
     return resp.data;
   } catch (e) {
+    localStorage.removeItem('token');
     store.dispatch(logout());
     return Promise.reject(e);
   }
@@ -66,6 +68,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         // Handle token refresh error
+        localStorage.removeItem('token');
         return Promise.reject(refreshError);
       }
     }
@@ -103,7 +106,7 @@ axiosInstance.interceptors.response.use(
         ] = `Bearer ${access_token}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // Optionally log out user or redirect to login
+        localStorage.removeItem('token');
         store.dispatch(logout());
         return Promise.reject(refreshError);
       }

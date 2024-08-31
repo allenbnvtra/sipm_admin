@@ -21,7 +21,7 @@ const ProtectedRoutes: React.FC = () => {
     });
 
     socketConnection.on('onlineUser', (data) => {
-      console.log(data);
+      data;
     });
 
     dispatch(setSocketConnection(socketConnection));
