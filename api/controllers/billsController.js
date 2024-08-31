@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Month from '../models/monthlyModel.js';
 import Payment from '../models/paymentModel.js';
 
@@ -89,6 +90,54 @@ export const billPayment = async (req, res) => {
       status: 'success',
       message: 'Payment has been created!',
       result: response,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
+  }
+};
+
+export const addNewBill = async (req, res) => {
+  try {
+    const tenantId = req.params.userId;
+
+    if (!tenantId) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Missing userID',
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(tenantId)) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Invalid userID format',
+      });
+    }
+
+    const {
+      meterNumber,
+      currentReading,
+      previousReading,
+      billingPeriod,
+      amountPerConsumption,
+    } = req.body;
+
+    const createdBill = await Month.create({
+      meterNumber,
+      currentReading,
+      previousReading,
+      billingPeriod,
+      amountPerConsumption,
+      user: tenantId,
+    });
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'New bill created!',
+      result: createdBill,
     });
   } catch (error) {
     console.error('Error during payment creation:', error);

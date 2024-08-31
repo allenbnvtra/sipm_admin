@@ -42,8 +42,6 @@ const Payment = ({
     reset,
   } = useForm<FormData>();
 
-  console.log(billId);
-
   const mutation: UseMutationResult<PaymentResponse, Error, FormData> =
     useMutation({
       mutationFn: async (formData: FormData) => {
@@ -80,7 +78,6 @@ const Payment = ({
     });
   };
 
-  // Determine loading state
   const isLoading = mutation.status === 'pending';
 
   return (

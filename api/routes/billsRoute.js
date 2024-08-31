@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  addNewBill,
   billPayment,
   getAllBills,
   getBill,
@@ -14,5 +15,6 @@ router.get('/', getAllBills);
 router.get('/:billId', getBill);
 router.get('/:billId/transactions', getBillTransactions);
 router.post('/:billId/payment', billPayment);
+router.post('/:userId/newBill', addNewBill);
 
 export default router;

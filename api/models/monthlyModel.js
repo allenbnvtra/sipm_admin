@@ -16,17 +16,22 @@ const monthlyAuditSchema = new mongoose.Schema(
     },
     currentReading: {
       type: Number,
-      required: true,
+      required: [true, 'Current reading is required'],
       default: 0,
     },
     previousReading: {
       type: Number,
-      required: true,
+      required: [true, 'Previous reading is required'],
       default: 0,
     },
     totalConsumption: {
       type: Number,
       default: 0,
+    },
+    amountPerConsumption: {
+      type: Number,
+      default: 0,
+      required: [true, 'Amount per consumption is required'],
     },
     remainingBalance: Number,
     totalPaid: Number,
@@ -54,7 +59,7 @@ monthlyAuditSchema.pre(/^find/, function (next) {
 
 monthlyAuditSchema.pre('save', function (next) {
   this.totalConsumption = this.currentReading - this.previousReading;
-  this.currentBill = this.totalConsumption * 12;
+  this.currentBill = this.totalConsumption * this.amountPerConsumption;
 
   if (this.remainingBalance === undefined) {
     this.remainingBalance = this.currentBill;

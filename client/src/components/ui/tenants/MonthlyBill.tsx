@@ -180,6 +180,8 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
         refreshData={refreshData}
       />
       <AddBillModal
+        refreshData={refreshData}
+        userId={tenantId}
         isAddBillModalOpen={isAddBillModalOpen}
         closeAddBillModal={() => setIsAddBillModalOpen(false)}
         previousReading={latestBill?.totalKwh}

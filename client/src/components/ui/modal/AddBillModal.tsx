@@ -1,19 +1,44 @@
-import { useEffect } from 'react';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
+import axiosInstance from '../../../utils/axiosInstance';
+import toast from 'react-hot-toast';
+import { useForm } from 'react-hook-form';
 
 interface AddBillModalProps {
+  userId: string | undefined;
   meterNumber: string;
   previousReading: number;
   isAddBillModalOpen: boolean;
   closeAddBillModal: () => void;
+  refreshData: () => void;
+}
+
+interface FormData {
+  meterNumber: string;
+  currentReading: number;
+  previousReading: number;
+  amountPerConsumption: number;
+  billingPeriod: string;
+}
+
+interface NewBillResponse {
+  status: string;
+  message: string;
+  result: object;
 }
 
 const AddBillModal = ({
+  userId,
   meterNumber,
   previousReading,
   isAddBillModalOpen,
   closeAddBillModal,
+  refreshData,
 }: AddBillModalProps) => {
+  const [totalConsumption, setTotalConsumption] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+
   useEffect(() => {
     if (isAddBillModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -25,6 +50,65 @@ const AddBillModal = ({
       document.body.style.overflow = 'auto';
     };
   }, [isAddBillModalOpen]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    reset,
+  } = useForm<FormData>({
+    defaultValues: {
+      meterNumber: meterNumber,
+      previousReading: previousReading,
+    },
+  });
+
+  const currentReading = watch('currentReading');
+  const amountPerConsumption = watch('amountPerConsumption');
+
+  useEffect(() => {
+    if (currentReading && previousReading && amountPerConsumption) {
+      setTotalConsumption(currentReading - previousReading);
+      setTotalAmount(totalConsumption * amountPerConsumption);
+    }
+  }, [currentReading, previousReading, amountPerConsumption, totalConsumption]);
+
+  const mutation: UseMutationResult<NewBillResponse, Error, FormData> =
+    useMutation({
+      mutationFn: async (formData: FormData) => {
+        if (!userId) {
+          throw new Error('User ID is required.');
+        }
+        const response = await axiosInstance.post<NewBillResponse>(
+          `/api/v1/bills/${userId}/newBill`,
+          formData
+        );
+        return response.data;
+      },
+      onSuccess: () => {
+        reset();
+        closeAddBillModal();
+        refreshData();
+      },
+      onError: (error: Error) => {
+        console.error('Action failed:', error.message);
+      },
+    });
+
+  const onSubmit = (formData: FormData) => {
+    const loadingId = toast.loading('Processing new bill...');
+    mutation.mutate(formData, {
+      onSuccess: () => {
+        toast.success('Bill successfully added!', { id: loadingId });
+      },
+      onError: () => {
+        toast.error('Action failed. Please try again.', { id: loadingId });
+      },
+    });
+  };
+
+  const isLoading = mutation.status === 'pending';
 
   return (
     <div
@@ -48,65 +132,76 @@ const AddBillModal = ({
           </button>
         </div>
 
-        <form className='px-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className='px-4'>
           <div className='form_field mb-4'>
-            <label htmlFor='meter_number' className='text-center'>
+            <label htmlFor='meterNumber' className='text-center'>
               Meter Number
             </label>
             <br />
             <input
               className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
               type='text'
-              id='meter_number'
-              name='meter_number'
+              {...register('meterNumber', { required: true })}
               placeholder='Enter meter number'
-              value={meterNumber}
+              defaultValue={meterNumber}
+              disabled={isLoading}
             />
+            {errors.meterNumber && (
+              <p className='text-red-500'>Meter number is required.</p>
+            )}
           </div>
 
           <div className='flex gap-2'>
             <div className='form_field'>
-              <label htmlFor='previous_reading'>Previous Reading</label>
+              <label htmlFor='previousReading'>Previous Reading</label>
               <br />
               <input
                 className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
                 type='number'
-                id='previous_reading'
-                name='previous_reading'
+                {...register('previousReading', { required: true })}
                 style={{ appearance: 'textfield' }}
                 placeholder='Enter previous reading'
-                value={previousReading}
+                defaultValue={previousReading}
+                disabled={isLoading}
               />
+              {errors.previousReading && (
+                <p className='text-red-500'>Previous reading is required.</p>
+              )}
             </div>
             <div className='form_field'>
-              <label htmlFor='current_reading'>Current Reading</label>
+              <label htmlFor='currentReading'>Current Reading</label>
               <br />
               <input
                 className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
                 type='number'
-                id='current_reading'
-                name='current_reading'
+                {...register('currentReading', { required: true })}
                 style={{ appearance: 'textfield' }}
                 placeholder='Enter current reading'
+                disabled={isLoading}
               />
+              {errors.currentReading && (
+                <p className='text-red-500'>Current reading is required.</p>
+              )}
             </div>
           </div>
 
           <div className='flex gap-2 mt-4'>
             <div className='form_field w-1/2'>
-              <label htmlFor='billing_period'>Billing Period</label>
+              <label htmlFor='billingPeriod'>Billing Period</label>
               <br />
               <input
                 className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
                 type='date'
-                id='billing_period'
-                name='billing_period'
+                {...register('billingPeriod', { required: true })}
                 placeholder='mm/dd/yyyy'
-                pattern='\d{2}/\d{2}/\d{4}'
+                disabled={isLoading}
               />
+              {errors.billingPeriod && (
+                <p className='text-red-500'>Billing period is required.</p>
+              )}
             </div>
             <div className='form_field w-1/2'>
-              <label htmlFor='amount_per_consumption'>
+              <label htmlFor='amountPerConsumption'>
                 Amount Per Consumption
               </label>
               <br />
@@ -117,11 +212,16 @@ const AddBillModal = ({
                 <input
                   className='w-full pl-6 pr-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
                   type='number'
-                  id='amount_per_consumption'
-                  name='amount_per_consumption'
+                  {...register('amountPerConsumption', { required: true })}
                   style={{ appearance: 'textfield' }}
                   placeholder='0.00'
+                  disabled={isLoading}
                 />
+                {errors.amountPerConsumption && (
+                  <p className='text-red-500'>
+                    Amount per consumption is required.
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -129,17 +229,25 @@ const AddBillModal = ({
           <div className='mt-5 text-sm text-slate-700'>
             <p>
               Total Consumption :{' '}
-              <span className='font-semibold text-slate-900'>199 kWh</span>
+              <span className='font-semibold text-slate-900'>
+                {totalConsumption} kWh
+              </span>
             </p>
             <p>
               Amount :{' '}
-              <span className='font-semibold text-slate-900'>PHP 199.30</span>
+              <span className='font-semibold text-slate-900'>
+                PHP {totalAmount.toFixed(2)}
+              </span>
             </p>
           </div>
 
           <div className='flex justify-center mt-5 mb-3'>
-            <button className='bg-green-600 text-white px-8 py-2 rounded-full font-medium button-green-gradient'>
-              Proceed
+            <button
+              type='submit'
+              className='bg-green-600 text-white px-8 py-2 rounded-full font-medium button-green-gradient'
+              disabled={isLoading}
+            >
+              {isLoading ? 'Processing...' : 'Proceed'}
             </button>
           </div>
         </form>
