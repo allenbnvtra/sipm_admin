@@ -28,7 +28,7 @@ axiosInstance.interceptors.request.use(
 
 const refreshToken = async () => {
   try {
-    const resp = await axiosInstance.post('/v1/refresh');
+    const resp = await axiosInstance.post('/api/v1/refresh');
     return resp.data;
   } catch (e) {
     store.dispatch(logout());
