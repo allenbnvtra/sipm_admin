@@ -109,7 +109,15 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
 
   return (
     <>
-      {data.result.map((bill) => (
+      <div className='cursor-pointer hover:bg-slate-50 transition-all border-b'>
+        <div
+          className='px-5 py-7 flex flex-col justify-center items-center text-indigo-800'
+          onClick={() => setIsAddBillModalOpen(true)}
+        >
+          <IoIosAddCircleOutline size={35} /> Add new bill
+        </div>
+      </div>
+      {sortedBills.map((bill) => (
         <div key={bill.id}>
           <div
             onClick={handleOpenBillModal(bill.id)}
@@ -164,17 +172,6 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
           </div>
         </div>
       ))}
-
-      <div className='cursor-pointer hover:bg-slate-50 transition-all border-b'>
-        <div className='flex justify-between items-center p-3 bg-slate-200 text-xs'></div>
-
-        <div
-          className='px-5 py-7 flex flex-col justify-center items-center text-indigo-800'
-          onClick={() => setIsAddBillModalOpen(true)}
-        >
-          <IoIosAddCircleOutline size={35} /> Add new bill
-        </div>
-      </div>
 
       <ViewBillsModal
         billId={billId}

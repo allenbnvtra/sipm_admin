@@ -85,7 +85,7 @@ const Payment = ({
 
   return (
     <div>
-      <div className='flex justify-between items-center mb-4'>
+      <div className='flex justify-between items-center m-4'>
         <button onClick={closePaymentModal} className='text-sm text-slate-500'>
           ← Back
         </button>
@@ -99,7 +99,7 @@ const Payment = ({
       {/* Payment form */}
       <form onSubmit={handleSubmit(onSubmit)} className='text-sm'>
         <div className='flex flex-col'>
-          <div className='flex justify-between mb-3 items-center'>
+          <div className='flex justify-between mb-2 items-center'>
             <p className='text-sm text-center text-slate-800 flex gap-1 items-center'>
               <MdOutlineAccountBalanceWallet size={20} />
               <span className='font-semibold'>
@@ -117,7 +117,7 @@ const Payment = ({
             />
           </div>
           {errors.paymentDate && (
-            <p className='text-red-500 text-sm text-end'>
+            <p className='text-red-500 text-xs text-end'>
               Payment Date is required
             </p>
           )}
@@ -138,12 +138,12 @@ const Payment = ({
                 style={{ appearance: 'textfield' }}
                 disabled={isLoading}
               />
-              {errors.paymentAmount && (
-                <p className='text-red-500 text-sm'>
-                  Payment Amount is required and must be greater than 0
-                </p>
-              )}
             </div>
+            {errors.paymentAmount && (
+              <p className='text-red-500 text-xs mt-2'>
+                Payment Amount is required
+              </p>
+            )}
           </div>
           <div>
             <label className='mb-1'>Receipt No</label>
@@ -155,7 +155,9 @@ const Payment = ({
               disabled={isLoading}
             />
             {errors.receiptNo && (
-              <p className='text-red-500 text-sm'>Receipt Number is required</p>
+              <p className='text-red-500 text-xs mt-2'>
+                Receipt Number is required
+              </p>
             )}
           </div>
         </div>

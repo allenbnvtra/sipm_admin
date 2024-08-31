@@ -47,7 +47,7 @@ const monthlyAuditSchema = new mongoose.Schema(
 monthlyAuditSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
-    select: 'name stallNumber active',
+    select: 'name stallNumber email active',
   });
   next();
 });

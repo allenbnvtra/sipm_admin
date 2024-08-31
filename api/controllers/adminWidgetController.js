@@ -145,17 +145,10 @@ export const getTenantData = async (req, res) => {
 
 export const getRecentTransactions = async (req, res) => {
   try {
-    const transactions = await Payment.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .populate({
-        path: 'user',
-        select: 'email',
-      })
-      .select('receiptNo paymentDate user');
+    const transactions = await Payment.find().sort({ createdAt: -1 }).limit(5);
 
     const formattedTransactions = transactions.map((transaction) => ({
-      username: transaction.user.email,
+      username: transaction.bill.user.email,
       receiptNo: transaction.receiptNo,
       paymentDate: transaction.paymentDate,
     }));
