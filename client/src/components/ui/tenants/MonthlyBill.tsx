@@ -3,7 +3,7 @@ import { FaClock } from 'react-icons/fa';
 import { MdOutlineEventNote } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../../../utils/axiosInstance';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import ViewBillsModal from '../modal/ViewBillModal/ViewBillsModal';
 import { formatBillingPeriod, formatCurrency } from '../../../helpers';
 import { IoIosAddCircleOutline } from 'react-icons/io';
@@ -56,7 +56,7 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
   const [isAddBillModalOpen, setIsAddBillModalOpen] = useState<boolean>(false);
   const [billId, setBillId] = useState<string | null>(null);
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['tenantMonthlyBill', year, tenantId],
     queryFn: () => fetchMonthlyBillPerTenant(year, tenantId as string),
     staleTime: 1000 * 60 * 5,
@@ -70,6 +70,10 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
       setIsViewBillModalOpen(true);
       setBillId(billId);
     };
+
+  const refreshData = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   if (isLoading) {
     return (
@@ -176,6 +180,7 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
         billId={billId}
         isViewBillsModalOpen={isViewBillModalOpen}
         closeViewBillsModal={() => setIsViewBillModalOpen(false)}
+        refreshData={refreshData}
       />
       <AddBillModal
         isAddBillModalOpen={isAddBillModalOpen}

@@ -70,3 +70,31 @@ export const getBillTransactions = async (req, res) => {
     });
   }
 };
+
+export const billPayment = async (req, res) => {
+  try {
+    const { paymentAmount, receiptNo, note, paymentDate } = req.body;
+
+    const paramsBill = req.params.billId;
+
+    const response = await Payment.create({
+      bill: paramsBill,
+      paymentAmount: paymentAmount,
+      receiptNo: receiptNo,
+      note: note,
+      paymentDate: paymentDate,
+    });
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Payment has been created!',
+      result: response,
+    });
+  } catch (error) {
+    console.error('Error during payment creation:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
+  }
+};

@@ -3,12 +3,12 @@ import { IoClose } from 'react-icons/io5';
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../../../../utils/axiosInstance';
 
-// External Component
 import Payment from './Payment';
 import MonthlyBill from './MonthlyBill';
 import Transactions from './Transactions';
 
 interface ViewBillsModalProps {
+  refreshData: () => void;
   isViewBillsModalOpen: boolean;
   closeViewBillsModal: () => void;
   billId: string | null;
@@ -38,16 +38,16 @@ const fetchData = async (billId: string): Promise<BillResult> => {
   const { data } = await axiosInstance.get<{ result: BillResult }>(
     `${import.meta.env.VITE_API_URL}/bills/${billId}`
   );
-
   return data.result;
 };
 
 const ViewBillsModal = ({
+  refreshData,
   isViewBillsModalOpen,
   closeViewBillsModal,
   billId,
 }: ViewBillsModalProps) => {
-  const { data, isLoading, isError, error } = useQuery<BillResult>({
+  const { data, isLoading, isError, error, refetch } = useQuery<BillResult>({
     queryKey: ['bill', billId],
     queryFn: () => fetchData(billId as string),
     enabled: isViewBillsModalOpen,
@@ -72,6 +72,11 @@ const ViewBillsModal = ({
     closeViewBillsModal();
     setIsPaymentModalOpen(false);
     setIsTransactionModalOpen(false);
+  };
+
+  const handleRefreshData = () => {
+    refetch();
+    refreshData();
   };
 
   if (isError) {
@@ -110,13 +115,21 @@ const ViewBillsModal = ({
         <div className='px-5 pb-4'>
           {isPaymentModalOpen && data ? (
             <Payment
+              refreshData={handleRefreshData}
+              billId={billId}
               data={data}
-              closePaymentModal={() => setIsPaymentModalOpen(false)}
+              closePaymentModal={() => {
+                setIsPaymentModalOpen(false);
+                handleRefreshData();
+              }}
             />
           ) : isTransactionModalOpen && data && billId ? (
             <Transactions
               billId={billId}
-              closeTransactionModal={() => setIsTransactionModalOpen(false)}
+              closeTransactionModal={() => {
+                setIsTransactionModalOpen(false);
+                handleRefreshData();
+              }}
             />
           ) : (
             <MonthlyBill
