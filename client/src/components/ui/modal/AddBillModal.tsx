@@ -141,8 +141,8 @@ const AddBillModal = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='px-4'>
-          <div className='form_field mb-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className='px-4 text-sm'>
+          <div className='mb-4'>
             <label htmlFor='meterNumber' className='text-center'>
               Meter Number
             </label>
@@ -161,7 +161,7 @@ const AddBillModal = ({
           </div>
 
           <div className='flex gap-2'>
-            <div className='form_field'>
+            <div className=''>
               <label htmlFor='previousReading'>Previous Reading</label>
               <br />
               <input
@@ -177,7 +177,7 @@ const AddBillModal = ({
                 <p className='text-red-500'>Previous reading is required.</p>
               )}
             </div>
-            <div className='form_field'>
+            <div className=''>
               <label htmlFor='currentReading'>Current Reading</label>
               <br />
               <input
@@ -195,7 +195,7 @@ const AddBillModal = ({
           </div>
 
           <div className='flex gap-2 mt-4'>
-            <div className='form_field w-1/2'>
+            <div className=' w-1/2'>
               <label htmlFor='billingPeriod'>Billing Period</label>
               <br />
               <input
@@ -209,7 +209,7 @@ const AddBillModal = ({
                 <p className='text-red-500'>Billing period is required.</p>
               )}
             </div>
-            <div className='form_field w-1/2'>
+            <div className=' w-1/2'>
               <label htmlFor='amountPerConsumption'>
                 Amount Per Consumption
               </label>
@@ -226,12 +226,12 @@ const AddBillModal = ({
                   placeholder='0.00'
                   disabled={isLoading}
                 />
-                {errors.amountPerConsumption && (
-                  <p className='text-red-500'>
-                    Amount per consumption is required.
-                  </p>
-                )}
               </div>
+              {errors.amountPerConsumption && (
+                <p className='text-red-500'>
+                  Amount per consumption is required.
+                </p>
+              )}
             </div>
           </div>
 
