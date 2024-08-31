@@ -107,6 +107,13 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
 
   const latestBill = sortedBills[0];
 
+  const nextBillingPeriod = new Date(latestBill.billingPeriod);
+  if (latestBill) {
+    nextBillingPeriod.setMonth(nextBillingPeriod.getMonth() + 1);
+
+    console.log('Next Billing Period:', formatBillingPeriod(nextBillingPeriod));
+  }
+
   return (
     <>
       <div className='cursor-pointer hover:bg-slate-50 transition-all border-b'>
@@ -186,6 +193,7 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
         closeAddBillModal={() => setIsAddBillModalOpen(false)}
         previousReading={latestBill?.totalKwh}
         meterNumber={latestBill?.meterNumber}
+        nextBillingPeriod={nextBillingPeriod}
       />
     </>
   );

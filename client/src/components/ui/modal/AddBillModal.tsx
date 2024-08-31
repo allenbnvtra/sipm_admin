@@ -10,6 +10,7 @@ interface AddBillModalProps {
   meterNumber: string;
   previousReading: number;
   isAddBillModalOpen: boolean;
+  nextBillingPeriod: Date;
   closeAddBillModal: () => void;
   refreshData: () => void;
 }
@@ -28,6 +29,10 @@ interface NewBillResponse {
   result: object;
 }
 
+const getEndOfMonth = (date: Date): Date => {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+};
+
 const AddBillModal = ({
   userId,
   meterNumber,
@@ -35,9 +40,12 @@ const AddBillModal = ({
   isAddBillModalOpen,
   closeAddBillModal,
   refreshData,
+  nextBillingPeriod,
 }: AddBillModalProps) => {
   const [totalConsumption, setTotalConsumption] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+
+  const endOfMonth = getEndOfMonth(nextBillingPeriod);
 
   useEffect(() => {
     if (isAddBillModalOpen) {
@@ -61,6 +69,7 @@ const AddBillModal = ({
     defaultValues: {
       meterNumber: meterNumber,
       previousReading: previousReading,
+      billingPeriod: endOfMonth.toISOString().split('T')[0],
     },
   });
 
@@ -127,7 +136,13 @@ const AddBillModal = ({
         }`}
       >
         <div className='flex justify-end'>
-          <button onClick={closeAddBillModal} className='text-lg text-gray-500'>
+          <button
+            onClick={() => {
+              closeAddBillModal();
+              reset();
+            }}
+            className='text-lg text-gray-500'
+          >
             <IoClose />
           </button>
         </div>
