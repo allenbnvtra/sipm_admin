@@ -26,7 +26,7 @@ interface FormData {
 interface PaymentResponse {
   status: string;
   message: string;
-  result: object;
+  result?: object;
 }
 
 const Payment = ({
@@ -54,26 +54,24 @@ const Payment = ({
         );
         return response.data;
       },
-      onSuccess: (data) => {
-        toast.success(data.message);
+      onSuccess: () => {
         reset();
         closePaymentModal();
         refreshData();
       },
       onError: (error: Error) => {
         console.error('Payment failed:', error.message);
-        toast.error('Payment failed. Please try again.');
       },
     });
 
   const onSubmit = (formData: FormData) => {
-    toast.loading('Processing payment...');
+    const loadingId = toast.loading('Processing payment...');
     mutation.mutate(formData, {
-      onSuccess: () => {
-        toast.dismiss();
+      onSuccess: (data) => {
+        toast.success(data.message, { id: loadingId });
       },
       onError: () => {
-        toast.dismiss();
+        toast.error('Payment failed. Please try again.', { id: loadingId });
       },
     });
   };

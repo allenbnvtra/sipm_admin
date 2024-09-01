@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema(
       default: 'user',
       select: false,
     },
+    imageUrl: {
+      type: String,
+    },
     passwordChangedAt: Date,
     passwordResetToken: String, // Change to String if you are using tokens
     passwordResetExpires: Date,
@@ -45,14 +48,12 @@ const userSchema = new mongoose.Schema(
 
 // Hash password before saving
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password') || this.isNew) return next();
-
+  if (!this.isModified('password')) return next();
   try {
-    // Hash the password with a cost of 12
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
-    // Set passwordChangedAt to current date
-    this.passwordChangedAt = Date.now();
+    this.passwordChangedAt = Date.now() - 1000;
+    next();
   } catch (error) {
     return next(error);
   }

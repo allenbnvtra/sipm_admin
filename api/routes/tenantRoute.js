@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  addNewTenant,
   getAllTenants,
   getTenant,
   getTenantBill,
@@ -10,6 +11,7 @@ const router = express.Router();
 
 router.use(isAuthenticated, isAdmin);
 router.get('/', getAllTenants);
+router.post('/', addNewTenant);
 router.get('/:tenantId', getTenant);
 router.get('/:tenantId/bill', getTenantBill);
 

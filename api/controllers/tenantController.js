@@ -171,3 +171,48 @@ export const getTenantBill = async (req, res) => {
     });
   }
 };
+
+export const addNewTenant = async (req, res) => {
+  try {
+    const { name, email, stallNumber, imageUrl, password, confirmPassword } =
+      req.body;
+
+    const isUserExist = await User.findOne({ email });
+
+    if (isUserExist) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'User already exist. Please try to user other email.',
+      });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Please confirm your password.',
+      });
+    }
+
+    const newUser = await User.create({
+      name,
+      email,
+      stallNumber,
+      imageUrl,
+      password,
+    });
+
+    newUser.password = undefined;
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'A new user has been added!',
+      result: newUser,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
+  }
+};
