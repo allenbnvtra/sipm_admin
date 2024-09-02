@@ -6,6 +6,7 @@ import axiosInstance from '../../../../utils/axiosInstance';
 import Payment from './Payment';
 import MonthlyBill from './MonthlyBill';
 import Transactions from './Transactions';
+import DeleteBillModal from './DeleteBillModal';
 
 interface ViewBillsModalProps {
   refreshData: () => void;
@@ -53,8 +54,10 @@ const ViewBillsModal = ({
     enabled: isViewBillsModalOpen,
   });
 
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState<boolean>(false);
+  const [isTransactionModalOpen, setIsTransactionModalOpen] =
+    useState<boolean>(false);
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (isViewBillsModalOpen) {
@@ -72,6 +75,7 @@ const ViewBillsModal = ({
     closeViewBillsModal();
     setIsPaymentModalOpen(false);
     setIsTransactionModalOpen(false);
+    setIsArchiveModalOpen(false);
   };
 
   const handleRefreshData = () => {
@@ -131,10 +135,19 @@ const ViewBillsModal = ({
                 handleRefreshData();
               }}
             />
+          ) : isArchiveModalOpen && billId && data ? (
+            <DeleteBillModal
+              billSuccess={() => closeViewBillsModal()}
+              refreshData={() => handleRefreshData()}
+              billId={billId}
+              data={data}
+              closeDeleteBillModal={() => setIsArchiveModalOpen(false)}
+            />
           ) : (
             <MonthlyBill
-              openTransactionModal={() => setIsTransactionModalOpen(true)}
               data={data}
+              openArchiveModal={() => setIsArchiveModalOpen(true)}
+              openTransactionModal={() => setIsTransactionModalOpen(true)}
               openPaymentModal={() => setIsPaymentModalOpen(true)}
             />
           )}

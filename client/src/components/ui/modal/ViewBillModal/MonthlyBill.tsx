@@ -3,6 +3,7 @@ import { IoPersonOutline } from 'react-icons/io5';
 import { MdOutlinePlace, MdPayment } from 'react-icons/md';
 import { GrTransaction } from 'react-icons/gr';
 import { formatBillingPeriod, formatCurrency } from '../../../../helpers';
+import { FiArchive } from 'react-icons/fi';
 
 interface MonthlyBillProps {
   data?: {
@@ -20,12 +21,14 @@ interface MonthlyBillProps {
   };
   openPaymentModal: () => void;
   openTransactionModal: () => void;
+  openArchiveModal: () => void;
 }
 
 const MonthlyBill = ({
   data,
   openPaymentModal,
   openTransactionModal,
+  openArchiveModal,
 }: MonthlyBillProps) => {
   return (
     <div>
@@ -116,11 +119,18 @@ const MonthlyBill = ({
           </p>
         </div>
 
-        <div className='flex justify-center mt-5 gap-2 text-sm'>
+        <div className='flex flex-wrap-reverse justify-center mt-5 gap-1 text-sm'>
+          <button
+            onClick={openArchiveModal}
+            className='text-white px-3 py-2 rounded-lg font-medium flex items-center gap-1 button-red-gradient'
+          >
+            <FiArchive size={18} />
+            Delete
+          </button>
           {data?.remainingBalance && data?.remainingBalance > 0 ? (
             <button
               onClick={openPaymentModal}
-              className='text-white px-8 py-2 rounded-full font-medium flex items-center gap-1 button-green-gradient'
+              className='text-white px-3 py-2 rounded-lg font-medium flex items-center gap-1 button-green-gradient'
             >
               <MdPayment size={18} />
               Payment
@@ -130,7 +140,7 @@ const MonthlyBill = ({
           )}
           <button
             onClick={openTransactionModal}
-            className='text-white px-8 py-2 rounded-full font-medium flex items-center gap-1 button-gradient'
+            className='text-white px-3 py-2 rounded-lg font-medium flex items-center gap-1 button-gradient'
           >
             <GrTransaction size={16} />
             Transactions

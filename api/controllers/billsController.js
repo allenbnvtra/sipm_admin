@@ -78,6 +78,15 @@ export const billPayment = async (req, res) => {
 
     const paramsBill = req.params.billId;
 
+    console.log(paramsBill);
+
+    if (!mongoose.Types.ObjectId.isValid(paramsBill)) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Invalid bill ID',
+      });
+    }
+
     const response = await Payment.create({
       bill: paramsBill,
       paymentAmount: paymentAmount,
@@ -141,6 +150,42 @@ export const addNewBill = async (req, res) => {
     });
   } catch (error) {
     console.error('Error during payment creation:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error',
+    });
+  }
+};
+
+export const deleteBill = async (req, res) => {
+  try {
+    const billId = req.params.billId;
+
+    if (!mongoose.Types.ObjectId.isValid(billId)) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Invalid bill ID',
+      });
+    }
+
+    const bill = await Month.findById(billId);
+
+    if (!bill) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'No bill found in this ID',
+      });
+    }
+
+    await Payment.deleteMany({ bill: billId });
+    await Month.findByIdAndDelete(billId);
+
+    return res.status(204).json({
+      status: 'success',
+      message: 'Bill and associated payments have been deleted successfully!',
+    });
+  } catch (error) {
+    console.error('Error during deleting bill and its transactions:', error);
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error',

@@ -69,13 +69,15 @@ const AddBillModal = ({
 
   const currentReading = watch('currentReading');
   const amountPerConsumption = watch('amountPerConsumption');
+  const pReading = watch('previousReading');
 
   useEffect(() => {
-    if (currentReading && previousReading && amountPerConsumption) {
-      setTotalConsumption(currentReading - previousReading);
-      setTotalAmount(totalConsumption * amountPerConsumption);
+    if (currentReading && amountPerConsumption && pReading) {
+      const newTotalConsumption = currentReading - pReading;
+      setTotalConsumption(newTotalConsumption);
+      setTotalAmount(newTotalConsumption * amountPerConsumption);
     }
-  }, [currentReading, previousReading, amountPerConsumption, totalConsumption]);
+  }, [currentReading, pReading, amountPerConsumption]);
 
   const mutation: UseMutationResult<NewBillResponse, Error, FormData> =
     useMutation({
@@ -143,9 +145,7 @@ const AddBillModal = ({
 
         <form onSubmit={handleSubmit(onSubmit)} className='px-4 text-sm'>
           <div className='mb-4'>
-            <label htmlFor='meterNumber' className='text-center'>
-              Meter Number
-            </label>
+            <label className='text-center'>Meter Number</label>
             <br />
             <input
               className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
@@ -162,7 +162,7 @@ const AddBillModal = ({
 
           <div className='flex gap-2'>
             <div className=''>
-              <label htmlFor='previousReading'>Previous Reading</label>
+              <label>Previous Reading</label>
               <br />
               <input
                 className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
@@ -178,7 +178,7 @@ const AddBillModal = ({
               )}
             </div>
             <div className=''>
-              <label htmlFor='currentReading'>Current Reading</label>
+              <label>Current Reading</label>
               <br />
               <input
                 className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
@@ -196,7 +196,7 @@ const AddBillModal = ({
 
           <div className='flex gap-2 mt-4'>
             <div className=' w-1/2'>
-              <label htmlFor='billingPeriod'>Billing Period</label>
+              <label>Billing Period</label>
               <br />
               <input
                 className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
@@ -210,9 +210,7 @@ const AddBillModal = ({
               )}
             </div>
             <div className=' w-1/2'>
-              <label htmlFor='amountPerConsumption'>
-                Amount Per Consumption
-              </label>
+              <label>Amount Per Consumption</label>
               <br />
               <div className='relative'>
                 <span className='absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500'>

@@ -138,3 +138,45 @@ body {
 .button-green-gradient:hover {
   animation: greenGradientTransition 0.15s forwards;
 }
+
+@keyframes redGradientTransition {
+  0% {
+    background: linear-gradient(
+      113deg,
+      rgba(205, 87, 87, 1) 0%,
+      rgba(186, 68, 68, 1) 57%,
+      rgba(214, 26, 26, 1) 100%
+    );
+  }
+  50% {
+    background: linear-gradient(
+      113deg,
+      rgba(205, 87, 87, 1) 0%,
+      rgba(186, 68, 68, 1) 57%,
+      rgba(186, 68, 68, 1) 100%
+    );
+  }
+  100% {
+    background: linear-gradient(
+      113deg,
+      rgb(182, 30, 30) 0%,
+      rgba(186, 68, 68, 1) 57%,
+      rgba(186, 68, 68, 1) 100%
+    );
+  }
+}
+
+.button-red-gradient {
+  background: linear-gradient(
+    113deg,
+    rgb(199, 69, 69) 0%,
+    rgb(210, 55, 55) 57%,
+    rgba(214, 26, 26, 1) 100%
+  );
+  background-size: 200% 200%;
+  transition: background 0.15s ease-in-out;
+}
+
+.button-red-gradient:hover {
+  animation: redGradientTransition 0.15s forwards;
+}
