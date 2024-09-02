@@ -61,11 +61,10 @@ const DeleteBillModal = ({
           </p>
 
           <p className='mt-2 text-xs'>
-            This{' '}
             <span className='font-extrabold text-red-800'>
               {data.user.name}'s
             </span>{' '}
-            bill for the month of{' '}
+            bill and transactions for the month of{' '}
             <span className='font-extrabold text-red-800'>
               {formatBillingPeriod(data.billingPeriod)}
             </span>{' '}

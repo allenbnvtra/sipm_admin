@@ -38,7 +38,7 @@ const BillPerTenantsPage = () => {
         <TenantInfo />
 
         {/* SECOND DIV */}
-        <div className='md:w-[70%] rounded-t-md border border-slate-200 bg-white shadow-md flex flex-col max-h-[87vh] overflow-hidden h-[90vh] xxl:h-[100vh] '>
+        <div className='md:w-[70%] rounded-t-md border border-slate-200 bg-white shadow-md flex flex-col max-h-[90vh] overflow-hidden h-[87vh] xxl:h-[100vh] '>
           <div className='flex justify-between items-center text-slate-900 border-b px-1 border-b-slate-200 shadow-md'>
             <div className='flex items-center'>
               <p

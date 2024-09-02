@@ -30,7 +30,7 @@ const DashboardTransactions = () => {
 
   if (isLoading) {
     return (
-      <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[21rem]'>
+      <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[22.3 rem]'>
         <div className='flex justify-between'>
           <p className='pt-1 text-sm font-medium text-slate-600'>
             Recent Transaction
@@ -72,7 +72,7 @@ const DashboardTransactions = () => {
 
   if (isError) {
     return (
-      <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[21rem]'>
+      <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[22.3 rem]'>
         <div className='flex justify-between'>
           <p className='pt-1 text-sm font-medium text-slate-700'>
             Recent Transaction
@@ -89,7 +89,7 @@ const DashboardTransactions = () => {
   }
 
   return (
-    <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[21rem]'>
+    <div className='w-full rounded-md border border-slate-200 bg-white p-3 shadow-md xxl:h-[22.3 rem]'>
       <div className='flex justify-between'>
         <p className='pt-1 text-sm font-medium text-slate-600'>
           Recent Transaction
@@ -119,7 +119,7 @@ const DashboardTransactions = () => {
               transactions.map((transaction, index) => (
                 <tr
                   key={index}
-                  className='border-b h-10 max-h-10 text-xs text-center text-slate-800'
+                  className='border-b h-10 xxl:h-14 max-h-10 text-xs text-center text-slate-800'
                 >
                   <td
                     title={transaction.username}
