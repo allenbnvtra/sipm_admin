@@ -132,7 +132,7 @@ const TransactionDetails = ({
               </div>
               <div className='text-sm'>
                 <div className='flex justify-between'>
-                  <p>Amount Per Consumption</p>
+                  <p>Rate per kWh</p>
                   <p>
                     {data.bill.amountPerConsumption <= 0
                       ? 'N/A'
