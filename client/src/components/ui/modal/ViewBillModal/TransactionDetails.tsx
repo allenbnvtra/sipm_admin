@@ -113,20 +113,22 @@ const TransactionDetails = ({
               </div>
               <div>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Name</p>
+                  <p className='text-slate-700 font-semibold mb-1'>Name</p>
                   <p>{data.user.name}</p>
                 </div>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Username</p>
+                  <p className='text-slate-700 font-semibold mb-1'>Username</p>
                   <p>{data.user.email}</p>
                 </div>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Stall number</p>
+                  <p className='text-slate-700 font-semibold mb-1'>
+                    Stall number
+                  </p>
                   <p>{data.user.stallNumber}</p>
                 </div>
                 <div>
                   <div className='flex justify-between'>
-                    <p className='text-slate-700 font-semibold'>
+                    <p className='text-slate-700 font-semibold mb-1'>
                       Billing period
                     </p>
                     {formatBillingPeriod(data.bill.billingPeriod)}
@@ -134,13 +136,17 @@ const TransactionDetails = ({
                 </div>
                 <div>
                   <div className='flex justify-between'>
-                    <p className='text-slate-700 font-semibold'>Consumption</p>
+                    <p className='text-slate-700 font-semibold mb-1'>
+                      Consumption
+                    </p>
                     <p>{data.bill.totalConsumption.toFixed(2)} kWh</p>
                   </div>
                 </div>
                 <div>
                   <div className='flex justify-between'>
-                    <p className='text-slate-700 font-semibold'>Rate per kWh</p>
+                    <p className='text-slate-700 font-semibold mb-1'>
+                      Rate per kWh
+                    </p>
                     <p>
                       {data.bill.amountPerConsumption <= 0
                         ? 'PHP 12'
@@ -151,7 +157,9 @@ const TransactionDetails = ({
 
                 <div className='text-xs mt-6'>
                   <div className='flex justify-between'>
-                    <p className='text-slate-700 font-semibold'>Computation</p>
+                    <p className='text-slate-700 font-semibold mb-1'>
+                      Computation
+                    </p>
                     <p>
                       {data.bill.amountPerConsumption <= 0
                         ? data.bill.totalConsumption.toFixed(2) + ' x 12.00'
@@ -164,7 +172,7 @@ const TransactionDetails = ({
 
                 <div>
                   <div className='flex justify-between'>
-                    <p className='text-slate-700 font-semibold'>
+                    <p className='text-slate-700 font-semibold mb-1'>
                       Total amount due
                     </p>
                     = PHP {data.bill.currentBill.toFixed(2)}
@@ -184,26 +192,34 @@ const TransactionDetails = ({
               </div>
               <div>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Receipt No.</p>
+                  <p className='text-slate-700 font-semibold mb-1'>
+                    Receipt No.
+                  </p>
                   <p>{data.receiptNumber}</p>
                 </div>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Payment date</p>
+                  <p className='text-slate-700 font-semibold mb-1'>
+                    Payment date
+                  </p>
                   <p>{formatDate(data.paymentDate)}</p>
                 </div>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>
+                  <p className='text-slate-700 font-semibold mb-1'>
                     Prev Outstanding balance
                   </p>
                   <p>PHP {data.previousBalance.toFixed(2)}</p>
                 </div>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Payment amount</p>
+                  <p className='text-slate-700 font-semibold mb-1'>
+                    Payment amount
+                  </p>
                   <p>PHP {data.paymentAmount.toFixed(2)}</p>
                 </div>
                 <div className='text-xs mt-6'>
                   <div className='flex justify-between'>
-                    <p className='text-slate-700 font-semibold'>Computation</p>
+                    <p className='text-slate-700 font-semibold mb-1'>
+                      Computation
+                    </p>
                     <p>
                       {data.previousBalance.toFixed(2) +
                         ' - ' +
@@ -212,7 +228,7 @@ const TransactionDetails = ({
                   </div>
                 </div>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>
+                  <p className='text-slate-700 font-semibold mb-1'>
                     New Outstanding balance
                   </p>
                   <p> = PHP {data.balance.toFixed(2)}</p>
