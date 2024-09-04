@@ -167,6 +167,7 @@ const AddBillModal = ({
               <input
                 className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
                 type='number'
+                step='0.01'
                 {...register('previousReading', { required: true })}
                 style={{ appearance: 'textfield' }}
                 placeholder='Enter previous reading'
@@ -183,6 +184,7 @@ const AddBillModal = ({
               <input
                 className='w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
                 type='number'
+                step='0.01'
                 {...register('currentReading', { required: true })}
                 style={{ appearance: 'textfield' }}
                 placeholder='Enter current reading'
@@ -219,6 +221,7 @@ const AddBillModal = ({
                 <input
                   className='w-full pl-6 pr-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
                   type='number'
+                  step='0.01'
                   {...register('amountPerConsumption', { required: true })}
                   style={{ appearance: 'textfield' }}
                   placeholder='0.00'

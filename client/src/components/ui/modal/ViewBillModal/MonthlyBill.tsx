@@ -73,7 +73,7 @@ const MonthlyBill = ({
             Previous(kWh)
             <span className='font-semibold'>
               {data?.previousReading !== undefined
-                ? data.previousReading
+                ? data.previousReading.toFixed(2)
                 : 'N/A'}
             </span>
           </p>
@@ -84,10 +84,10 @@ const MonthlyBill = ({
             </span>
           </p>
           <p className='flex flex-col items-center'>
-            Final Reading(kWh)
+            Actual(kWh)
             <span className='font-semibold'>
               {data?.totalConsumption !== undefined
-                ? data.totalConsumption
+                ? data.totalConsumption.toFixed(2)
                 : 'N/A'}
             </span>
           </p>
