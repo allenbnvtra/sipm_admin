@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Payment from '../models/PaymentModel.js';
+import Payment from '../models/paymentModel.js';
 
 export const getTransactionById = async (req, res) => {
   try {

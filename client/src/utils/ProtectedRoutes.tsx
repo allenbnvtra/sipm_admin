@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/ui/sidebar/Sidebar';
 import Header from '../components/ui/header/Header';
 import MobileNav from '../components/ui/mobileNav/MobileNav';
@@ -12,8 +12,14 @@ const ProtectedRoutes: React.FC = () => {
   const isAuthenticated = !!token;
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
     const socketConnection: Socket = io(import.meta.env.VITE_BASE_API_URL, {
       auth: {
         token: localStorage.getItem('token'),
@@ -29,11 +35,7 @@ const ProtectedRoutes: React.FC = () => {
     return () => {
       socketConnection.disconnect();
     };
-  }, [dispatch]);
-
-  if (!isAuthenticated) {
-    return <Navigate to='/' replace />;
-  }
+  }, [dispatch, isAuthenticated, navigate]);
 
   return (
     <div className='flex bg-gray-100'>
