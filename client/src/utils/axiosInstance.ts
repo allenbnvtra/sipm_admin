@@ -51,7 +51,6 @@ axiosInstance.interceptors.response.use(
 
         const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-        // Dispatch action to update token in Redux store
         store.dispatch(
           setAuth({
             token: resp.accessToken,

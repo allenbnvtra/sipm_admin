@@ -37,6 +37,7 @@ const LoginPage = () => {
         const { _id, email, name } = response.data.result;
 
         localStorage.setItem('token', accessToken);
+        localStorage.setItem('user', JSON.stringify({ id: _id, email, name }));
 
         dispatch(
           setAuth({ token: accessToken, user: { id: _id, email, name } })

@@ -13,7 +13,7 @@ export interface UserState {
 
 const initialState: UserState = {
   token: localStorage.getItem('token') || null,
-  user: {
+  user: JSON.parse(localStorage.getItem('user') || '{}') || {
     id: null,
     name: null,
     email: null,
@@ -36,6 +36,7 @@ const userSlice = createSlice({
       state.user = action.payload.user;
 
       localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
     },
 
     setSocketConnection: (state, action: PayloadAction<Socket>) => {
@@ -50,6 +51,7 @@ const userSlice = createSlice({
 
       // Clear from localStorage
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
   },
 });
