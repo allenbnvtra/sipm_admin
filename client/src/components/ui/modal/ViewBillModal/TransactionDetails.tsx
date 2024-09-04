@@ -92,10 +92,10 @@ const TransactionDetails = ({
           </button>
         </div>
 
-        <div className='max-h-[30rem] overflow-hidden overflow-y-auto'>
-          <div className='bg-white border p-4 rounded shadow-lg max-w-md font-mono md:mx-5'>
+        <div className='flex justify-center'>
+          <div className='bg-white border p-4 rounded shadow-lg max-w-md font-mono md:mx-5 w-[20rem] max-h-[30rem] overflow-hidden overflow-y-auto scrollbar-hide'>
             {/* Receipt Header */}
-            <div className='text-center border-b border-dashed border-gray-400 pb-2 mb-4'>
+            <div className='text-center mb-4'>
               <h2 className='text-xl font-bold'>Cash Invoice</h2>
               <p className='text-xs text-gray-500'>
                 San Ildefonso Public Market
@@ -104,8 +104,12 @@ const TransactionDetails = ({
 
             {/* Tenant Info */}
             <div className='mb-4 text-xs'>
-              <div className='text-center text-gray-500 text-xs mb-2'>
-                Billing Info
+              <div className='flex items-center my-4'>
+                <span className='border-b border-dashed border-slate-300 flex-grow'></span>
+                <span className='mx-4 text-sm text-slate-500'>
+                  Billing Info
+                </span>
+                <span className='border-b border-dashed border-slate-300 flex-grow'></span>
               </div>
               <div>
                 <div className='flex justify-between'>
@@ -145,7 +149,7 @@ const TransactionDetails = ({
                   </div>
                 </div>
 
-                <div className='text-sm mt-6'>
+                <div className='text-xs mt-6'>
                   <div className='flex justify-between'>
                     <p className='text-slate-700 font-semibold'>Computation</p>
                     <p>
@@ -170,9 +174,13 @@ const TransactionDetails = ({
             </div>
 
             {/* Payment Info */}
-            <div className='mb-4 text-xs'>
-              <div className='text-center text-gray-500 text-xs mb-2'>
-                Payment Info
+            <div className='mt-7 text-xs'>
+              <div className='flex items-center my-4'>
+                <span className='border-b border-dashed border-slate-300 flex-grow'></span>
+                <span className='mx-4 text-sm text-slate-500'>
+                  Payment Info
+                </span>
+                <span className='border-b border-dashed border-slate-300 flex-grow'></span>
               </div>
               <div>
                 <div className='flex justify-between'>
@@ -193,7 +201,7 @@ const TransactionDetails = ({
                   <p className='text-slate-700 font-semibold'>Payment amount</p>
                   <p>PHP {data.paymentAmount.toFixed(2)}</p>
                 </div>
-                <div className='text-sm mt-6'>
+                <div className='text-xs mt-6'>
                   <div className='flex justify-between'>
                     <p className='text-slate-700 font-semibold'>Computation</p>
                     <p>
@@ -213,10 +221,8 @@ const TransactionDetails = ({
             </div>
 
             {data.note && (
-              <div className='mb-4 text-xs'>
-                <div className='text-center text-gray-500 text-xs mb-2'>
-                  Note
-                </div>
+              <div className='mt-6 text-xs'>
+                <div className='text-center text-gray-500 text-xs'>Note</div>
                 <div className='text-sm flex justify-center'>
                   <p className='w-[17.7rem] text-center'>{data.note}</p>
                 </div>
