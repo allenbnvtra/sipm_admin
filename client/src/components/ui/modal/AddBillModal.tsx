@@ -212,7 +212,7 @@ const AddBillModal = ({
               )}
             </div>
             <div className=' w-1/2'>
-              <label>Amount Per Consumption</label>
+              <label>Rate Per kWh</label>
               <br />
               <div className='relative'>
                 <span className='absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500'>
@@ -229,9 +229,7 @@ const AddBillModal = ({
                 />
               </div>
               {errors.amountPerConsumption && (
-                <p className='text-red-500'>
-                  Amount per consumption is required.
-                </p>
+                <p className='text-red-500'>Rate Per kWh is required.</p>
               )}
             </div>
           </div>
