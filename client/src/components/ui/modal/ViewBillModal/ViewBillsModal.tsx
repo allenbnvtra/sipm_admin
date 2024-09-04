@@ -51,7 +51,7 @@ const ViewBillsModal = ({
   const { data, isLoading, isError, error, refetch } = useQuery<BillResult>({
     queryKey: ['bill', billId],
     queryFn: () => fetchData(billId as string),
-    enabled: isViewBillsModalOpen,
+    enabled: !!billId,
   });
 
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState<boolean>(false);
