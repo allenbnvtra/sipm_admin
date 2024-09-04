@@ -143,6 +143,13 @@ export const getTenantBill = async (req, res) => {
       )
       .lean();
 
+    if (!bills) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'No bill found',
+      });
+    }
+
     const filteredBills = bills.filter((bill) => {
       const billingYear = new Date(bill.billingPeriod).getFullYear();
       return billingYear.toString() === year;

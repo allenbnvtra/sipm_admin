@@ -2,11 +2,6 @@ import mongoose from 'mongoose';
 
 const paymentSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User',
-      // required: [true, 'Payment needs a user'],
-    },
     bill: {
       type: mongoose.Schema.ObjectId,
       ref: 'Month',
@@ -69,14 +64,6 @@ paymentSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'bill',
     select: 'remainingBalance billingPeriod user',
-  });
-  next();
-});
-
-paymentSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'user',
-    select: 'name email',
   });
   next();
 });

@@ -63,14 +63,6 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
     retry: 1,
   });
 
-  const handleOpenBillModal =
-    (billId: string) =>
-    (event: React.MouseEvent<HTMLDivElement>): void => {
-      event.preventDefault();
-      setIsViewBillModalOpen(true);
-      setBillId(billId);
-    };
-
   const refreshData = useCallback(() => {
     refetch();
   }, [refetch]);
@@ -117,7 +109,10 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
           {sortedBills.map((bill) => (
             <div key={bill.id}>
               <div
-                onClick={handleOpenBillModal(bill.id)}
+                onClick={() => {
+                  setIsViewBillModalOpen(true);
+                  setBillId(bill.id);
+                }}
                 className='cursor-pointer hover:bg-slate-50 transition-all border-b'
               >
                 <div className='flex justify-between items-center p-3 bg-slate-200 text-xs'>
