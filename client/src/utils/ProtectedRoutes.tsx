@@ -18,7 +18,7 @@ const ProtectedRoutes: React.FC = () => {
       navigate('/');
       return;
     }
-  }, []);
+  }, [token, navigate]);
 
   useEffect(() => {
     const socketConnection: Socket = io(import.meta.env.VITE_BASE_API_URL, {
