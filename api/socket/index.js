@@ -22,8 +22,6 @@ const io = new Server(server, {
 const onlineUsers = new Set();
 
 io.on('connection', async (socket) => {
-  console.log('User connected', socket.id);
-
   const token = socket.handshake.auth.token;
   if (!token) {
     socket.disconnect();
@@ -163,7 +161,6 @@ io.on('connection', async (socket) => {
     socket.on('disconnect', () => {
       onlineUsers.delete(userId);
       io.emit('onlineUser', Array.from(onlineUsers));
-      console.log('User disconnected', socket.id);
     });
   } catch (error) {
     console.error('Error during connection setup:', error);

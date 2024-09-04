@@ -50,7 +50,7 @@ const ViewBillsModal = ({
 }: ViewBillsModalProps) => {
   const { data, isLoading, isError, error, refetch } = useQuery<BillResult>({
     queryKey: ['bill', billId],
-    queryFn: () => fetchData(billId as string),
+    queryFn: () => fetchData(billId || ''),
     enabled: !!billId,
   });
 
@@ -137,8 +137,8 @@ const ViewBillsModal = ({
             />
           ) : isArchiveModalOpen && billId && data ? (
             <DeleteBillModal
-              billSuccess={() => closeViewBillsModal()}
-              refreshData={() => handleRefreshData()}
+              billSuccess={closeViewBillsModal}
+              refreshData={refreshData}
               billId={billId}
               data={data}
               closeDeleteBillModal={() => setIsArchiveModalOpen(false)}

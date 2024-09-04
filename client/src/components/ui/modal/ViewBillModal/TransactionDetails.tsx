@@ -1,10 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../../../../utils/axiosInstance';
-import {
-  formatBillingPeriod,
-  formatCurrency,
-  formatDate,
-} from '../../../../helpers';
+import { formatBillingPeriod, formatDate } from '../../../../helpers';
 
 interface TransactionDetailsProps {
   transactionId: string | null;
@@ -96,7 +92,7 @@ const TransactionDetails = ({
         <div className='bg-white border p-4 rounded shadow-lg max-w-md font-mono md:mx-5'>
           {/* Receipt Header */}
           <div className='text-center border-b border-dashed border-gray-400 pb-2 mb-4'>
-            <h2 className='text-xl font-bold'>Transaction Receipt</h2>
+            <h2 className='text-xl font-bold'>Official Receipt</h2>
             <p className='text-xs text-gray-500'>San Ildefonso Public Market</p>
           </div>
 
@@ -107,36 +103,36 @@ const TransactionDetails = ({
             </div>
             <div className='text-sm'>
               <div className='flex justify-between'>
-                <p>Name</p>
+                <p className='text-slate-700 font-semibold'>Name</p>
                 <p>{data.user.name}</p>
               </div>
               <div className='flex justify-between'>
-                <p>Username</p>
+                <p className='text-slate-700 font-semibold'>Username</p>
                 <p>{data.user.email}</p>
               </div>
               <div className='flex justify-between'>
-                <p>Stall Number</p>
+                <p className='text-slate-700 font-semibold'>Stall Number</p>
                 <p>{data.user.stallNumber}</p>
               </div>
               <div className='text-sm'>
                 <div className='flex justify-between'>
-                  <p>Billing Period</p>
+                  <p className='text-slate-700 font-semibold'>Billing Period</p>
                   {formatBillingPeriod(data.bill.billingPeriod)}
                 </div>
               </div>
               <div className='text-sm'>
                 <div className='flex justify-between'>
-                  <p>Consumption</p>
-                  <p>{data.bill.totalConsumption} kWh</p>
+                  <p className='text-slate-700 font-semibold'>Consumption</p>
+                  <p>{data.bill.totalConsumption.toFixed(2)} kWh</p>
                 </div>
               </div>
               <div className='text-sm'>
                 <div className='flex justify-between'>
-                  <p>Rate per kWh</p>
+                  <p className='text-slate-700 font-semibold'>Rate per kWh</p>
                   <p>
                     {data.bill.amountPerConsumption <= 0
                       ? 'N/A'
-                      : formatCurrency(data.bill.amountPerConsumption)}
+                      : data.bill.amountPerConsumption.toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -150,22 +146,22 @@ const TransactionDetails = ({
             </div>
             <div className='text-sm'>
               <div className='flex justify-between'>
-                <p>Receipt No.</p>
+                <p className='text-slate-700 font-semibold'>Receipt No.</p>
                 <p>{data.receiptNumber}</p>
               </div>
               <div className='flex justify-between'>
-                <p>Payment Date</p>
+                <p className='text-slate-700 font-semibold'>Payment Date</p>
                 <p>{formatDate(data.paymentDate)}</p>
               </div>
               <div className='flex justify-between'>
-                <p>Payment Amount</p>
-                <p className='font-sans'>
-                  {formatCurrency(data.paymentAmount)}
-                </p>
+                <p className='text-slate-700 font-semibold'>Payment Amount</p>
+                <p>{data.paymentAmount.toFixed(2)}</p>
               </div>
               <div className='flex justify-between'>
-                <p>Balance after payment</p>
-                <p className='font-sans'>{formatCurrency(data.balance)}</p>
+                <p className='text-slate-700 font-semibold'>
+                  Balance after payment
+                </p>
+                <p>{data.balance.toFixed(2)}</p>
               </div>
             </div>
           </div>

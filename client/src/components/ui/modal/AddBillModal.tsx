@@ -238,7 +238,7 @@ const AddBillModal = ({
             <p>
               Total Consumption :{' '}
               <span className='font-semibold text-slate-900'>
-                {totalConsumption} kWh
+                {totalConsumption.toFixed(2)} kWh
               </span>
             </p>
             <p>

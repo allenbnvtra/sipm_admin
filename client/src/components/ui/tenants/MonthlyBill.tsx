@@ -43,7 +43,7 @@ const fetchMonthlyBillPerTenant = async (
 
   data.result = data.result.map((bill) => ({
     ...bill,
-    billingPeriod: new Date(bill.billingPeriod), // Convert to Date
+    billingPeriod: new Date(bill.billingPeriod),
   }));
 
   return data;
@@ -58,9 +58,10 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['tenantMonthlyBill', year, tenantId],
-    queryFn: () => fetchMonthlyBillPerTenant(year, tenantId as string),
+    queryFn: () => fetchMonthlyBillPerTenant(year, tenantId || ''),
     staleTime: 1000 * 60 * 5,
     retry: 1,
+    enabled: !!tenantId,
   });
 
   const refreshData = useCallback(() => {
@@ -176,14 +177,20 @@ const MonthlyBill = ({ year }: MonthlyBillProps) => {
       <ViewBillsModal
         billId={billId}
         isViewBillsModalOpen={isViewBillModalOpen}
-        closeViewBillsModal={() => setIsViewBillModalOpen(false)}
+        closeViewBillsModal={() => {
+          setIsViewBillModalOpen(false);
+          setBillId('');
+        }}
         refreshData={refreshData}
       />
       <AddBillModal
         refreshData={refreshData}
         userId={tenantId}
         isAddBillModalOpen={isAddBillModalOpen}
-        closeAddBillModal={() => setIsAddBillModalOpen(false)}
+        closeAddBillModal={() => {
+          setIsAddBillModalOpen(false);
+          setBillId('');
+        }}
         previousReading={latestBill?.totalKwh}
         meterNumber={latestBill?.meterNumber}
         nextBillingPeriod={nextBillingPeriod}
