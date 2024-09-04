@@ -26,6 +26,7 @@ export const getTransactionById = async (req, res) => {
         billingPeriod: transaction.bill.billingPeriod,
         totalConsumption: transaction.bill.totalConsumption,
         amountPerConsumption: transaction.bill.amountPerConsumption,
+        currentBill: transaction.bill.currentBill,
       },
       receiptNumber: transaction.receiptNo,
       paymentAmount: transaction.paymentAmount,
@@ -46,7 +47,6 @@ export const getTransactionById = async (req, res) => {
       result,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error',

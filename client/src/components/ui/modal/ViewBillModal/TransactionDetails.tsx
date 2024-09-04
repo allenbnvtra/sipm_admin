@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../../../../utils/axiosInstance';
 import { formatBillingPeriod, formatDate } from '../../../../helpers';
+import { FiArchive, FiPrinter } from 'react-icons/fi';
 
 interface TransactionDetailsProps {
   transactionId: string | null;
@@ -19,6 +20,7 @@ interface Result {
     billingPeriod: Date;
     totalConsumption: number;
     amountPerConsumption: number;
+    currentBill: number;
   };
   receiptNumber: string;
   paymentAmount: number;
@@ -132,8 +134,30 @@ const TransactionDetails = ({
                   <p>
                     {data.bill.amountPerConsumption <= 0
                       ? 'N/A'
-                      : data.bill.amountPerConsumption.toFixed(2)}
+                      : 'PHP ' + data.bill.amountPerConsumption.toFixed(2)}
                   </p>
+                </div>
+              </div>
+
+              <div className='text-sm mt-6'>
+                <div className='flex justify-between'>
+                  <p className='text-slate-700 font-semibold'>Computation</p>
+                  <p>
+                    {data.bill.amountPerConsumption <= 0
+                      ? 'N/A'
+                      : data.bill.totalConsumption.toFixed(2) +
+                        ' x ' +
+                        data.bill.amountPerConsumption.toFixed(2)}
+                  </p>
+                </div>
+              </div>
+
+              <div className='text-sm'>
+                <div className='flex justify-between'>
+                  <p className='text-slate-700 font-semibold'>
+                    Current Bill Amount
+                  </p>
+                  = PHP {data.bill.currentBill.toFixed(2)}
                 </div>
               </div>
             </div>
@@ -155,13 +179,13 @@ const TransactionDetails = ({
               </div>
               <div className='flex justify-between'>
                 <p className='text-slate-700 font-semibold'>Payment Amount</p>
-                <p>{data.paymentAmount.toFixed(2)}</p>
+                <p>PHP {data.paymentAmount.toFixed(2)}</p>
               </div>
               <div className='flex justify-between'>
                 <p className='text-slate-700 font-semibold'>
                   Balance after payment
                 </p>
-                <p>{data.balance.toFixed(2)}</p>
+                <p>PHP {data.balance.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -180,6 +204,16 @@ const TransactionDetails = ({
             <p>Transaction ID: {transactionId}</p>
             <p>Generated on {new Date().toLocaleDateString()}</p>
           </div>
+        </div>
+        <div className='flex justify-center mt-5 gap-2'>
+          <button className='text-white text-sm px-3 py-2 rounded-lg font-medium flex items-center gap-1 button-red-gradient'>
+            <FiArchive size={18} />
+            Delete
+          </button>
+          <button className='text-white text-sm px-3 py-2 rounded-lg font-medium flex items-center gap-1 button-green-gradient'>
+            <FiPrinter size={18} />
+            Print
+          </button>
         </div>
       </div>
     );

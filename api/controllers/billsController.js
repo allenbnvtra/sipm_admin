@@ -78,8 +78,6 @@ export const billPayment = async (req, res) => {
 
     const paramsBill = req.params.billId;
 
-    console.log(paramsBill);
-
     if (!mongoose.Types.ObjectId.isValid(paramsBill)) {
       return res.status(400).json({
         status: 'fail',

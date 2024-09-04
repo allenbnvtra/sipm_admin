@@ -64,7 +64,7 @@ paymentSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'bill',
     select:
-      'remainingBalance billingPeriod user totalConsumption amountPerConsumption',
+      'remainingBalance billingPeriod user totalConsumption amountPerConsumption currentBill',
   });
   next();
 });
