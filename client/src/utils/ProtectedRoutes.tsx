@@ -19,7 +19,9 @@ const ProtectedRoutes: React.FC = () => {
       navigate('/');
       return;
     }
+  });
 
+  useEffect(() => {
     const socketConnection: Socket = io(import.meta.env.VITE_BASE_API_URL, {
       auth: {
         token: localStorage.getItem('token'),
@@ -35,7 +37,7 @@ const ProtectedRoutes: React.FC = () => {
     return () => {
       socketConnection.disconnect();
     };
-  }, [dispatch, isAuthenticated, navigate]);
+  }, [dispatch]);
 
   return (
     <div className='flex bg-gray-100'>
