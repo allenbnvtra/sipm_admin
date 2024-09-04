@@ -80,7 +80,9 @@ const MonthlyBill = ({
           <p className='flex flex-col items-center'>
             Current(kWh)
             <span className='font-semibold'>
-              {data?.currentReading !== undefined ? data.currentReading : 'N/A'}
+              {data?.currentReading !== undefined
+                ? data.currentReading.toFixed(2)
+                : 'N/A'}
             </span>
           </p>
           <p className='flex flex-col items-center'>

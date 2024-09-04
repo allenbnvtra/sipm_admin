@@ -127,6 +127,7 @@ const Payment = ({
               </span>
               <input
                 type='number'
+                step='0.01'
                 {...register('paymentAmount', { required: true, min: 1 })}
                 className='w-full pl-6 pr-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-transparent'
                 placeholder='0.00'
