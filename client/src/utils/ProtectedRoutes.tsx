@@ -9,13 +9,12 @@ import { setSocketConnection } from '../redux/slices/userSlice';
 
 const ProtectedRoutes: React.FC = () => {
   const token = localStorage.getItem('token');
-  const isAuthenticated = !!token;
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!token) {
       navigate('/');
       return;
     }
@@ -24,7 +23,7 @@ const ProtectedRoutes: React.FC = () => {
   useEffect(() => {
     const socketConnection: Socket = io(import.meta.env.VITE_BASE_API_URL, {
       auth: {
-        token: localStorage.getItem('token'),
+        token: token,
       },
     });
 
@@ -37,7 +36,7 @@ const ProtectedRoutes: React.FC = () => {
     return () => {
       socketConnection.disconnect();
     };
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   return (
     <div className='flex bg-gray-100'>
