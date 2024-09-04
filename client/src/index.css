@@ -13,6 +13,13 @@
 html,
 body {
   font-family: 'Roboto', 'Noto Sans', Arial, Helvetica, sans-serif;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 .t_head {
