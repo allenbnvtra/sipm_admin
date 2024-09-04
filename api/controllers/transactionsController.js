@@ -26,8 +26,6 @@ export const getTransactionById = async (req, res) => {
       _id: { $lt: transaction._id },
     }).sort({ _id: -1 });
 
-    console.log(previousTransaction);
-
     const previousBalance = previousTransaction
       ? previousTransaction.balance
       : transaction.bill.currentBill;
