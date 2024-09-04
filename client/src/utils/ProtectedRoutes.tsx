@@ -38,6 +38,10 @@ const ProtectedRoutes: React.FC = () => {
     };
   }, [dispatch, token]);
 
+  if (!token) {
+    return null;
+  }
+
   return (
     <div className='flex bg-gray-100'>
       <Sidebar />

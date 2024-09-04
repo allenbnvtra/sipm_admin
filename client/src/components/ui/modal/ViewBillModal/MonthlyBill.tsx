@@ -86,7 +86,7 @@ const MonthlyBill = ({
             </span>
           </p>
           <p className='flex flex-col items-center'>
-            Actual(kWh)
+            Actual Consumption(kWh)
             <span className='font-semibold'>
               {data?.totalConsumption !== undefined
                 ? data.totalConsumption.toFixed(2)
