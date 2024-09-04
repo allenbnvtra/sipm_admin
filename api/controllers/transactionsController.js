@@ -14,6 +14,24 @@ export const getTransactionById = async (req, res) => {
 
     const transaction = await Payment.findById(transactionId);
 
+    if (!transaction) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Transaction not found',
+      });
+    }
+
+    const previousTransaction = await Payment.findOne({
+      bill: transaction.bill._id,
+      _id: { $lt: transaction._id },
+    }).sort({ _id: -1 });
+
+    console.log(previousTransaction);
+
+    const previousBalance = previousTransaction
+      ? previousTransaction.balance
+      : transaction.bill.currentBill;
+
     const result = {
       user: {
         userId: transaction.bill.user._id,
@@ -31,16 +49,10 @@ export const getTransactionById = async (req, res) => {
       receiptNumber: transaction.receiptNo,
       paymentAmount: transaction.paymentAmount,
       note: transaction.note,
+      previousBalance,
       balance: transaction.balance,
       paymentDate: transaction.paymentDate,
     };
-
-    if (!transaction) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'Transaction not found',
-      });
-    }
 
     return res.status(200).json({
       status: 'success',

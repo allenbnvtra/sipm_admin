@@ -27,6 +27,7 @@ interface Result {
   note: string;
   balance: number;
   paymentDate: Date;
+  previousBalance: number;
 }
 
 interface FetchResult {
@@ -91,120 +92,148 @@ const TransactionDetails = ({
           </button>
         </div>
 
-        <div className='bg-white border p-4 rounded shadow-lg max-w-md font-mono md:mx-5'>
-          {/* Receipt Header */}
-          <div className='text-center border-b border-dashed border-gray-400 pb-2 mb-4'>
-            <h2 className='text-xl font-bold'>Official Receipt</h2>
-            <p className='text-xs text-gray-500'>San Ildefonso Public Market</p>
-          </div>
-
-          {/* Tenant Info */}
-          <div className='mb-4'>
-            <div className='text-center text-gray-500 text-xs mb-2'>
-              Billing Info
+        <div className='max-h-[30rem] overflow-hidden overflow-y-auto'>
+          <div className='bg-white border p-4 rounded shadow-lg max-w-md font-mono md:mx-5'>
+            {/* Receipt Header */}
+            <div className='text-center border-b border-dashed border-gray-400 pb-2 mb-4'>
+              <h2 className='text-xl font-bold'>Cash Invoice</h2>
+              <p className='text-xs text-gray-500'>
+                San Ildefonso Public Market
+              </p>
             </div>
-            <div className='text-sm'>
-              <div className='flex justify-between'>
-                <p className='text-slate-700 font-semibold'>Name</p>
-                <p>{data.user.name}</p>
-              </div>
-              <div className='flex justify-between'>
-                <p className='text-slate-700 font-semibold'>Username</p>
-                <p>{data.user.email}</p>
-              </div>
-              <div className='flex justify-between'>
-                <p className='text-slate-700 font-semibold'>Stall Number</p>
-                <p>{data.user.stallNumber}</p>
-              </div>
-              <div className='text-sm'>
-                <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Billing Period</p>
-                  {formatBillingPeriod(data.bill.billingPeriod)}
-                </div>
-              </div>
-              <div className='text-sm'>
-                <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Consumption</p>
-                  <p>{data.bill.totalConsumption.toFixed(2)} kWh</p>
-                </div>
-              </div>
-              <div className='text-sm'>
-                <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Rate per kWh</p>
-                  <p>
-                    {data.bill.amountPerConsumption <= 0
-                      ? 'N/A'
-                      : 'PHP ' + data.bill.amountPerConsumption.toFixed(2)}
-                  </p>
-                </div>
-              </div>
 
-              <div className='text-sm mt-6'>
+            {/* Tenant Info */}
+            <div className='mb-4'>
+              <div className='text-center text-gray-500 text-xs mb-2'>
+                Billing Info
+              </div>
+              <div className='text-sm'>
                 <div className='flex justify-between'>
-                  <p className='text-slate-700 font-semibold'>Computation</p>
-                  <p>
-                    {data.bill.amountPerConsumption <= 0
-                      ? 'N/A'
-                      : data.bill.totalConsumption.toFixed(2) +
-                        ' x ' +
-                        data.bill.amountPerConsumption.toFixed(2)}
-                  </p>
+                  <p className='text-slate-700 font-semibold'>Name</p>
+                  <p>{data.user.name}</p>
+                </div>
+                <div className='flex justify-between'>
+                  <p className='text-slate-700 font-semibold'>Username</p>
+                  <p>{data.user.email}</p>
+                </div>
+                <div className='flex justify-between'>
+                  <p className='text-slate-700 font-semibold'>Stall number</p>
+                  <p>{data.user.stallNumber}</p>
+                </div>
+                <div className='text-sm'>
+                  <div className='flex justify-between'>
+                    <p className='text-slate-700 font-semibold'>
+                      Billing period
+                    </p>
+                    {formatBillingPeriod(data.bill.billingPeriod)}
+                  </div>
+                </div>
+                <div className='text-sm'>
+                  <div className='flex justify-between'>
+                    <p className='text-slate-700 font-semibold'>Consumption</p>
+                    <p>{data.bill.totalConsumption.toFixed(2)} kWh</p>
+                  </div>
+                </div>
+                <div className='text-sm'>
+                  <div className='flex justify-between'>
+                    <p className='text-slate-700 font-semibold'>Rate per kWh</p>
+                    <p>
+                      {data.bill.amountPerConsumption <= 0
+                        ? 'PHP 12'
+                        : 'PHP ' + data.bill.amountPerConsumption.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className='text-sm mt-6'>
+                  <div className='flex justify-between'>
+                    <p className='text-slate-700 font-semibold'>Computation</p>
+                    <p>
+                      {data.bill.amountPerConsumption <= 0
+                        ? data.bill.totalConsumption.toFixed(2) + ' x 12.00'
+                        : data.bill.totalConsumption.toFixed(2) +
+                          ' x ' +
+                          data.bill.amountPerConsumption.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className='text-sm'>
+                  <div className='flex justify-between'>
+                    <p className='text-slate-700 font-semibold'>
+                      Total amount due
+                    </p>
+                    = PHP {data.bill.currentBill.toFixed(2)}
+                  </div>
                 </div>
               </div>
+            </div>
 
+            {/* Payment Info */}
+            <div className='mb-4'>
+              <div className='text-center text-gray-500 text-xs mb-2'>
+                Payment Info
+              </div>
               <div className='text-sm'>
+                <div className='flex justify-between'>
+                  <p className='text-slate-700 font-semibold'>Receipt No.</p>
+                  <p>{data.receiptNumber}</p>
+                </div>
+                <div className='flex justify-between'>
+                  <p className='text-slate-700 font-semibold'>Payment date</p>
+                  <p>{formatDate(data.paymentDate)}</p>
+                </div>
                 <div className='flex justify-between'>
                   <p className='text-slate-700 font-semibold'>
-                    Current Bill Amount
+                    Previous Outstanding balance
                   </p>
-                  = PHP {data.bill.currentBill.toFixed(2)}
+                  <p>PHP {data.previousBalance.toFixed(2)}</p>
+                </div>
+                <div className='flex justify-between'>
+                  <p className='text-slate-700 font-semibold'>Payment amount</p>
+                  <p>PHP {data.paymentAmount.toFixed(2)}</p>
+                </div>
+                <div className='text-sm mt-6'>
+                  <div className='flex justify-between'>
+                    <p className='text-slate-700 font-semibold'>Computation</p>
+                    <p>
+                      {data.previousBalance.toFixed(2) +
+                        ' - ' +
+                        data.paymentAmount.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+                <div className='flex justify-between'>
+                  <p className='text-slate-700 font-semibold'>
+                    New Outstanding balance
+                  </p>
+                  <p> = PHP {data.balance.toFixed(2)}</p>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Payment Info */}
-          <div className='mb-4'>
-            <div className='text-center text-gray-500 text-xs mb-2'>
-              Payment Info
-            </div>
-            <div className='text-sm'>
-              <div className='flex justify-between'>
-                <p className='text-slate-700 font-semibold'>Receipt No.</p>
-                <p>{data.receiptNumber}</p>
+            {data.note && (
+              <div className='mb-4'>
+                <div className='text-center text-gray-500 text-xs mb-2'>
+                  Note
+                </div>
+                <div className='text-sm flex justify-center'>
+                  <p className='w-[17.7rem] text-center'>{data.note}</p>
+                </div>
               </div>
-              <div className='flex justify-between'>
-                <p className='text-slate-700 font-semibold'>Payment Date</p>
-                <p>{formatDate(data.paymentDate)}</p>
-              </div>
-              <div className='flex justify-between'>
-                <p className='text-slate-700 font-semibold'>Payment Amount</p>
-                <p>PHP {data.paymentAmount.toFixed(2)}</p>
-              </div>
-              <div className='flex justify-between'>
-                <p className='text-slate-700 font-semibold'>
-                  Balance after payment
-                </p>
-                <p>PHP {data.balance.toFixed(2)}</p>
-              </div>
-            </div>
-          </div>
+            )}
 
-          {data.note && (
-            <div className='mb-4'>
-              <div className='text-center text-gray-500 text-xs mb-2'>Note</div>
-              <div className='text-sm flex justify-center'>
-                <p className='w-[17.7rem] text-center'>{data.note}</p>
-              </div>
+            {/* Receipt Footer */}
+            <div className='text-center border-t border-dashed border-gray-400 pt-2 mt-4 text-xs text-gray-500'>
+              <p>Transaction ID: {transactionId}</p>
+              <p>
+                Generated on {new Date().toLocaleDateString()} at{' '}
+                {new Date().toLocaleTimeString()}
+              </p>
             </div>
-          )}
-
-          {/* Receipt Footer */}
-          <div className='text-center border-t border-dashed border-gray-400 pt-2 mt-4 text-xs text-gray-500'>
-            <p>Transaction ID: {transactionId}</p>
-            <p>Generated on {new Date().toLocaleDateString()}</p>
           </div>
         </div>
+
         <div className='flex justify-center mt-5 gap-2'>
           <button className='text-white text-sm px-3 py-2 rounded-lg font-medium flex items-center gap-1 button-red-gradient'>
             <FiArchive size={18} />
