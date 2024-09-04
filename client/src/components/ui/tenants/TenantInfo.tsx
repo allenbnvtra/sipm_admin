@@ -5,16 +5,22 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { AiOutlineMessage } from 'react-icons/ai';
-import { FaArchive, FaEdit } from 'react-icons/fa';
 import { IoPersonCircle } from 'react-icons/io5';
-import { MdAlternateEmail, MdOutlinePlace } from 'react-icons/md';
+import {
+  MdAlternateEmail,
+  MdOutlineDangerous,
+  MdOutlinePlace,
+} from 'react-icons/md';
 import axiosInstance from '../../../utils/axiosInstance';
+import { LuWallet } from 'react-icons/lu';
+import { formatCurrency } from '../../../helpers';
 
 interface TenantInfo {
   id: string;
   name: string;
   email: string;
   stallNumber: string;
+  totalBalance: number;
 }
 
 const fetchTenantInfo = async (tenantId: string): Promise<TenantInfo> => {
@@ -27,7 +33,6 @@ const fetchTenantInfo = async (tenantId: string): Promise<TenantInfo> => {
 
 const TenantInfo = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  // const [isEditable, setIsEditable] = useState<boolean>(false);
 
   const { tenantId } = useParams<{ tenantId: string }>();
   const { data, isLoading, isError, error } = useQuery<TenantInfo>({
@@ -86,6 +91,10 @@ const TenantInfo = () => {
                   <MdOutlinePlace className='text-md text-slate-900' />
                   {data?.stallNumber}
                 </p>
+                <p className='text-xs text-slate-700 font-semibold mt-1 flex gap-1'>
+                  <LuWallet className='text-md text-slate-900' />
+                  {formatCurrency(data?.totalBalance)}
+                </p>
               </>
             )
           )}
@@ -93,18 +102,11 @@ const TenantInfo = () => {
 
         <div className='flex justify-center gap-3 px-2 pb-5'>
           <div
-            // onClick={() => setIsEditable(!isEditable)}
-            className='flex items-center text-blue-600 gap-1 bg-blue-200 rounded-md px-3 cursor-pointer py-2 hover:bg-blue-300 transition-all'
-          >
-            <FaEdit size={15} />
-            <p className='text-xs font-medium'>Edit</p>
-          </div>
-          <div
             onClick={() => setIsDeleteModalOpen(true)}
-            className='flex items-center text-red-600 gap-1 bg-red-200 rounded-md px-3 cursor-pointer py-2 hover:bg-red-300 transition-all'
+            className='flex items-center text-white gap-1 button-red-gradient rounded-md px-3 cursor-pointer py-2 transition-all'
           >
-            <FaArchive size={14} />
-            <p className='text-xs font-medium'>Archive</p>
+            <MdOutlineDangerous size={18} />
+            <p className='text-xs font-medium'>Deactivate</p>
           </div>
         </div>
       </div>

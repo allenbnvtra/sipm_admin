@@ -108,6 +108,13 @@ export const getTenant = async (req, res) => {
       });
     }
 
+    const bill = await Month.find({ user: tenantId });
+
+    let totalBalance = 0;
+    bill.forEach((bills) => {
+      totalBalance += bills.remainingBalance;
+    });
+
     return res.status(200).json({
       status: 'success',
       result: {
@@ -115,6 +122,7 @@ export const getTenant = async (req, res) => {
         name: result.name,
         email: result.email,
         stallNumber: result.stallNumber,
+        totalBalance,
       },
     });
   } catch (error) {
