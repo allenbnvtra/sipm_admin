@@ -159,11 +159,13 @@ const TransactionDetails = ({
               </div>
               <div className='flex justify-between'>
                 <p>Payment Amount</p>
-                <p>{formatCurrency(data.paymentAmount)}</p>
+                <p className='font-sans'>
+                  {formatCurrency(data.paymentAmount)}
+                </p>
               </div>
               <div className='flex justify-between'>
                 <p>Balance after payment</p>
-                <p>{formatCurrency(data.balance)}</p>
+                <p className='font-sans'>{formatCurrency(data.balance)}</p>
               </div>
             </div>
           </div>
