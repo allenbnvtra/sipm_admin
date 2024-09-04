@@ -24,6 +24,8 @@ export const getTransactionById = async (req, res) => {
       bill: {
         billId: transaction.bill._id,
         billingPeriod: transaction.bill.billingPeriod,
+        totalConsumption: transaction.bill.totalConsumption,
+        amountPerConsumption: transaction.bill.amountPerConsumption,
       },
       receiptNumber: transaction.receiptNo,
       paymentAmount: transaction.paymentAmount,

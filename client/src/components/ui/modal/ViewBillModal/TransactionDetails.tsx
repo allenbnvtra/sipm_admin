@@ -21,6 +21,8 @@ interface Result {
   bill: {
     billId: string;
     billingPeriod: Date;
+    totalConsumption: number;
+    amountPerConsumption: number;
   };
   receiptNumber: string;
   paymentAmount: number;
@@ -116,11 +118,27 @@ const TransactionDetails = ({
                 <p>Stall Number</p>
                 <p>{data.user.stallNumber}</p>
               </div>
-            </div>
-            <div className='text-sm'>
-              <div className='flex justify-between'>
-                <p>Billing Period</p>
-                {formatBillingPeriod(data.bill.billingPeriod)}
+              <div className='text-sm'>
+                <div className='flex justify-between'>
+                  <p>Billing Period</p>
+                  {formatBillingPeriod(data.bill.billingPeriod)}
+                </div>
+              </div>
+              <div className='text-sm'>
+                <div className='flex justify-between'>
+                  <p>Consumption</p>
+                  <p>{data.bill.totalConsumption} kWh</p>
+                </div>
+              </div>
+              <div className='text-sm'>
+                <div className='flex justify-between'>
+                  <p>Amount Per Consumption</p>
+                  <p>
+                    {data.bill.amountPerConsumption <= 0
+                      ? 'N/A'
+                      : formatCurrency(data.bill.amountPerConsumption)}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -149,6 +167,15 @@ const TransactionDetails = ({
               </div>
             </div>
           </div>
+
+          {data.note && (
+            <div className='mb-4'>
+              <div className='text-center text-gray-500 text-xs mb-2'>Note</div>
+              <div className='text-sm flex justify-center'>
+                <p className='w-[17.7rem] text-center'>{data.note}</p>
+              </div>
+            </div>
+          )}
 
           {/* Receipt Footer */}
           <div className='text-center border-t border-dashed border-gray-400 pt-2 mt-4 text-xs text-gray-500'>
