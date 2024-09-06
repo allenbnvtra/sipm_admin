@@ -29,6 +29,7 @@ interface BillResult {
   currentReading: number;
   previousReading: number;
   totalConsumption: number;
+  amountPerConsumption: number;
   status: string;
   billingPeriod: Date;
   remainingBalance: number;
@@ -144,12 +145,15 @@ const ViewBillsModal = ({
               closeDeleteBillModal={() => setIsArchiveModalOpen(false)}
             />
           ) : (
-            <MonthlyBill
-              data={data}
-              openArchiveModal={() => setIsArchiveModalOpen(true)}
-              openTransactionModal={() => setIsTransactionModalOpen(true)}
-              openPaymentModal={() => setIsPaymentModalOpen(true)}
-            />
+            billId &&
+            data && (
+              <MonthlyBill
+                data={data}
+                openArchiveModal={() => setIsArchiveModalOpen(true)}
+                openTransactionModal={() => setIsTransactionModalOpen(true)}
+                openPaymentModal={() => setIsPaymentModalOpen(true)}
+              />
+            )
           )}
         </div>
       </div>

@@ -6,7 +6,7 @@ import { formatBillingPeriod, formatCurrency } from '../../../../helpers';
 import { FiArchive } from 'react-icons/fi';
 
 interface MonthlyBillProps {
-  data?: {
+  data: {
     user: {
       name: string;
       stallNumber: string;
@@ -33,10 +33,10 @@ const MonthlyBill = ({
 }: MonthlyBillProps) => {
   let totalCurrentBill = 0;
 
-  if (data?.amountPerConsumption === 0) {
+  if (data && data.amountPerConsumption === 0) {
     totalCurrentBill = 12;
   } else {
-    totalCurrentBill = data?.amountPerConsumption;
+    totalCurrentBill = data.amountPerConsumption;
   }
 
   return (
