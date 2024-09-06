@@ -30,6 +30,7 @@ export const getBill = async (req, res) => {
       currentReading: bill.currentReading,
       previousReading: bill.previousReading,
       totalConsumption: bill.totalConsumption,
+      amountPerConsumption: bill.amountPerConsumption,
       status: bill.status,
       billingPeriod: bill.billingPeriod,
       remainingBalance: bill.remainingBalance,

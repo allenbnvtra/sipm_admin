@@ -15,6 +15,7 @@ interface MonthlyBillProps {
     billingPeriod: Date;
     previousReading: number;
     currentReading: number;
+    amountPerConsumption: number;
     totalConsumption: number;
     currentBill: number;
     remainingBalance: number;
@@ -30,6 +31,14 @@ const MonthlyBill = ({
   openTransactionModal,
   openArchiveModal,
 }: MonthlyBillProps) => {
+  let totalCurrentBill = 0;
+
+  if (data?.amountPerConsumption === 0) {
+    totalCurrentBill = 12;
+  } else {
+    totalCurrentBill = data?.amountPerConsumption;
+  }
+
   return (
     <div>
       {/* TENANT INFO */}
@@ -107,7 +116,7 @@ const MonthlyBill = ({
             Current
             <span className='font-semibold'>
               {data?.currentBill !== undefined
-                ? formatCurrency(data.currentBill)
+                ? formatCurrency(totalCurrentBill * data.totalConsumption)
                 : 'N/A'}
             </span>
           </p>

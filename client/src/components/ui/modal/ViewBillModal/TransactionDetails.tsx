@@ -80,7 +80,17 @@ const TransactionDetails = ({
     );
   }
 
+  let tenantAPC = 0;
+
   if (data) {
+    if (data.bill.amountPerConsumption === 0) {
+      tenantAPC = 12;
+    } else {
+      tenantAPC = data.bill.amountPerConsumption;
+    }
+
+    const totalAmountDue = tenantAPC * data.bill.totalConsumption;
+
     return (
       <div>
         <div className='flex justify-between items-center mb-4'>
@@ -149,8 +159,8 @@ const TransactionDetails = ({
                     </p>
                     <p>
                       {data.bill.amountPerConsumption <= 0
-                        ? 'PHP 12'
-                        : 'PHP ' + data.bill.amountPerConsumption.toFixed(2)}
+                        ? 'PHP 12.00'
+                        : 'PHP ' + tenantAPC.toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -165,7 +175,7 @@ const TransactionDetails = ({
                         ? data.bill.totalConsumption.toFixed(2) + ' x 12.00'
                         : data.bill.totalConsumption.toFixed(2) +
                           ' x ' +
-                          data.bill.amountPerConsumption.toFixed(2)}
+                          tenantAPC.toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -175,7 +185,10 @@ const TransactionDetails = ({
                     <p className='text-slate-700 font-semibold mb-1'>
                       Total amount due
                     </p>
-                    = PHP {data.bill.currentBill.toFixed(2)}
+                    = PHP{' '}
+                    {data.bill.currentBill === 0
+                      ? totalAmountDue.toFixed(2)
+                      : data.bill.currentBill.toFixed(2)}
                   </div>
                 </div>
               </div>
@@ -221,9 +234,13 @@ const TransactionDetails = ({
                       Computation
                     </p>
                     <p>
-                      {data.previousBalance.toFixed(2) +
-                        ' - ' +
-                        data.paymentAmount.toFixed(2)}
+                      {data.bill.currentBill === 0
+                        ? totalAmountDue.toFixed(2) +
+                          ' - ' +
+                          data.paymentAmount.toFixed(2)
+                        : data.bill.currentBill.toFixed(2) +
+                          ' - ' +
+                          data.paymentAmount.toFixed(2)}
                     </p>
                   </div>
                 </div>
