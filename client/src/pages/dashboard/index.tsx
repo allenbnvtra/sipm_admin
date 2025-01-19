@@ -1,4 +1,4 @@
-import { Graph } from '@/components/ui/dashboard/Graph';
+import Graph from '@/components/ui/dashboard/Graph';
 import DashboardTable from '../../components/ui/dashboard/DashboardTable';
 import DashboardTransactions from '../../components/ui/dashboard/DashboardTransactions';
 import Summary from '../../components/ui/dashboard/Summary';
