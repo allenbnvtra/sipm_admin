@@ -23,6 +23,7 @@ const BillPerTenantsPage = () => {
       currentYear - 2,
       currentYear - 3,
       currentYear - 4,
+      currentYear - 5,
     ].map(String);
   };
 
