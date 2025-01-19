@@ -46,22 +46,22 @@ const Profile = () => {
         </div>
       )}
       <div
-        className='flex w-full cursor-pointer items-center rounded-md bg-indigo-100 p-1'
+        className='flex w-full cursor-pointer items-center rounded-md bg-[#161d38] p-1'
         onClick={toggleDropdown}
       >
-        <IoPersonCircle className='mr-1 text-5xl text-[#1c3153]' />
+        <IoPersonCircle className='mr-1 text-5xl text-[#ededed]' />
         <div className='flex w-full items-center justify-between pr-2'>
           <div className='text-xs flex-1 overflow-hidden'>
-            <p className='font-semibold w-[7rem] text-slate-800 overflow-hidden whitespace-nowrap text-ellipsis capitalize'>
+            <p className='font-semibold w-[7rem] text-slate-200 overflow-hidden whitespace-nowrap text-ellipsis capitalize'>
               {name}
             </p>
-            <p className='text-xs w-[7rem] font-light text-slate-700 overflow-hidden whitespace-nowrap text-ellipsis lowercase'>
+            <p className='text-xs w-[7rem] font-light text-slate-200 overflow-hidden whitespace-nowrap text-ellipsis lowercase'>
               @{email}
             </p>
           </div>
-          <div className='rounded-full bg-indigo-200 p-1'>
+          <div className='rounded-full bg-white p-1'>
             <MdOutlineKeyboardArrowDown
-              className={cn('text-xl text-slate-700 transition-transform', {
+              className={cn('text-xl text-slate-800 transition-transform', {
                 'rotate-180': isDropdownOpen,
               })}
             />

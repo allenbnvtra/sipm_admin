@@ -15,7 +15,7 @@ const NavItems = () => {
   };
 
   return (
-    <ul className='mt-9 w-full'>
+    <ul className='mt-6 w-full'>
       {SidebarItems.map(({ title, path, subLinks, icon: Icon }) => {
         const isActive =
           title &&
@@ -29,9 +29,9 @@ const NavItems = () => {
               <Link
                 to={path}
                 className={cn(
-                  'flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-4 text-xs text-slate-800 transition-all hover:bg-indigo-100',
+                  'flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-4 text-xs text-slate-50 transition-all hover:bg-[#2a3768]',
                   {
-                    'bg-indigo-100 text-slate-900 font-medium': isActive,
+                    'bg-[#2F3F72] text-slate-50 font-medium': isActive,
                   }
                 )}
               >
@@ -41,9 +41,9 @@ const NavItems = () => {
               <p
                 onClick={() => hasSublinks && handleToggle(title)}
                 className={cn(
-                  'flex w-full cursor-pointer items-center justify-between rounded-md px-4 py-4 text-xs text-slate-800 transition-all hover:bg-indigo-100',
+                  'flex w-full cursor-pointer items-center justify-between rounded-md px-4 py-4 text-xs text-slate-50 transition-all hover:bg-[#2a3768]',
                   {
-                    'bg-indigo-100 text-indigo-700': isActive,
+                    'bg-[#2F3F72] text-slate-50': isActive,
                   }
                 )}
               >
@@ -64,15 +64,15 @@ const NavItems = () => {
 
             {hasSublinks && openDropdown === title && (
               <div className='relative ml-4'>
-                <div className='absolute bottom-0 left-0 top-0 border-l border-slate-700'></div>
+                <div className='absolute bottom-0 left-0 top-0 border-l border-slate-50'></div>
                 <div className='ml-4 mt-1 flex flex-col gap-1'>
                   {subLinks.map(({ title, path }) => {
                     return (
                       <div key={title} className='relative flex items-center'>
-                        <div className='absolute left-1 top-1/2 h-3 w-6 -translate-x-[80%] -translate-y-[90%] border-b border-slate-700'></div>
+                        <div className='absolute left-1 top-1/2 h-3 w-6 -translate-x-[80%] -translate-y-[90%] border-b border-slate-50'></div>
                         <Link
                           to={path}
-                          className='flex w-full items-center gap-2 rounded-md px-4 py-2 text-slate-800 transition-all hover:bg-indigo-100'
+                          className='flex w-full items-center gap-2 rounded-md px-4 py-2 text-slate-50 transition-all hover:bg-[#2a3768]'
                         >
                           <p className='text-xs font-medium'>{title}</p>
                         </Link>

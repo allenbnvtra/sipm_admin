@@ -14,6 +14,9 @@ import BillPerTenantsPage from './pages/tenants/tenantBill';
 import InboxPage from './pages/inbox';
 import LoginPage from './pages/login';
 import BillsPage from './pages/bills';
+import GeneralReportsPage from './pages/reports/generalReports';
+import MonthlyBillsReportsPage from './pages/reports/monthlyBillsReports';
+import PaymentsReportPage from './pages/reports/paymentsReport';
 
 function App() {
   const queryClient = new QueryClient();
@@ -41,6 +44,14 @@ function App() {
               {/* INBOX */}
               <Route path='/inbox' element={<InboxPage />} />
               <Route path='/inbox/m/:userId' element={<InboxPage />} />
+
+              {/* REPORTS */}
+              <Route path='/reports' element={<GeneralReportsPage />} />
+              <Route
+                path='/reports/monthly-bill'
+                element={<MonthlyBillsReportsPage />}
+              />
+              <Route path='/reports/payment' element={<PaymentsReportPage />} />
 
               <Route path='*' element={<Navigate to='/not-found' />} />
             </Route>

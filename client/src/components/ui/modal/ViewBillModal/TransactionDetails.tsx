@@ -228,27 +228,12 @@ const TransactionDetails = ({
                   </p>
                   <p>PHP {data.paymentAmount.toFixed(2)}</p>
                 </div>
-                <div className='text-xs mt-6'>
-                  <div className='flex justify-between'>
-                    <p className='text-slate-700 font-semibold mb-1'>
-                      Computation
-                    </p>
-                    <p>
-                      {data.bill.currentBill === 0
-                        ? totalAmountDue.toFixed(2) +
-                          ' - ' +
-                          data.paymentAmount.toFixed(2)
-                        : data.bill.currentBill.toFixed(2) +
-                          ' - ' +
-                          data.paymentAmount.toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-                <div className='flex justify-between'>
+
+                <div className='flex justify-between mt-5'>
                   <p className='text-slate-700 font-semibold mb-1'>
                     New Outstanding balance
                   </p>
-                  <p> = PHP {data.balance.toFixed(2)}</p>
+                  <p>PHP {data.balance.toFixed(2)}</p>
                 </div>
               </div>
             </div>

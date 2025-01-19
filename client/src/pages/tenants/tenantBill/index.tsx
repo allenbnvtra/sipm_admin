@@ -17,9 +17,13 @@ const BillPerTenantsPage = () => {
 
   const getLastThreeYears = (): string[] => {
     const currentYear = new Date().getFullYear();
-    return [currentYear, currentYear - 1, currentYear - 2, currentYear - 3].map(
-      String
-    );
+    return [
+      currentYear,
+      currentYear - 1,
+      currentYear - 2,
+      currentYear - 3,
+      currentYear - 4,
+    ].map(String);
   };
 
   const years = getLastThreeYears();

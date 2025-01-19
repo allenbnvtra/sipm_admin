@@ -43,11 +43,11 @@ const ProtectedRoutes: React.FC = () => {
   }
 
   return (
-    <div className='flex bg-gray-100'>
+    <div className='flex bg-[#e5e9e9]'>
       <Sidebar />
       <div className='w-full'>
         <Header />
-        <div className='bg-gray-100 p-3 md:px-[3rem]'>
+        <div className='bg-[#e5e9e9] p-3 md:px-[3rem]'>
           <Outlet />
         </div>
         <div className='sticky bottom-0'>

@@ -147,7 +147,7 @@ const LoginPage = () => {
 
             <button
               type='submit'
-              className={`bg-indigo-800 text-white text-sm py-3 rounded-md ${
+              className={`bg-[#202a4e] text-white text-sm py-3 rounded-md ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               disabled={loading}

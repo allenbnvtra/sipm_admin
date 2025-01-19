@@ -13,7 +13,7 @@ const Header = () => {
     return () => clearInterval(intervalId);
   }, []);
   return (
-    <div className='sticky top-0 z-[1000] flex w-full items-center justify-end bg-slate-800 p-3 text-white xs:justify-between md:px-6'>
+    <div className='sticky top-0 z-[1000] flex w-full items-center justify-end bg-white shadow-sm px-3 py-4 text-slate-800 xs:justify-between md:px-6'>
       <p className='text-md hidden font-medium xs:block'>
         {currentTime.toLocaleDateString('en-US', {
           weekday: 'long', // "Monday"

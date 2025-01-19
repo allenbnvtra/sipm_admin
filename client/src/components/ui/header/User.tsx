@@ -27,7 +27,7 @@ const User = () => {
 
   return (
     <div
-      className='relative flex cursor-pointer items-center gap-5 rounded-full bg-[#244371a3] p-1 transition-all shadow-2xl hover:bg-[#375480a3]'
+      className='relative flex cursor-pointer items-center gap-5 text-white rounded-full bg-[#2F3F72] p-1 transition-all shadow-2xl hover:bg-[#1c2647]'
       onClick={toggleUserDropdown}
     >
       <div className='flex items-center gap-1'>

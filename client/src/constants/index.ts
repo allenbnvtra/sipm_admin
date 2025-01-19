@@ -22,7 +22,7 @@ export const SidebarItems: SidebarItem[] = [
     subLinks: [
       { title: 'General', path: '/reports' },
       { title: 'Monthly Billing', path: '/reports/monthly-bill' },
-      { title: 'Payments', path: '/reports/payments' },
+      { title: 'Payments', path: '/reports/payment' },
     ],
   },
   { icon: TbLogs, title: 'Activity Logs', path: '/activity-logs' },
